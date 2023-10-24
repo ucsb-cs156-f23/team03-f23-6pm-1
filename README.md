@@ -1,4 +1,14 @@
 # team02-f23-6pm-1
+```
+| Table                       | Team Member  | Github Id     |
+|-----------------------------|--------------|---------------|
+| `UCSBDiningCommonsMenuItem` | Jake         | jakedel       |
+| `UCSBOrganization`          | Johnson      | johnsonchan105|
+| `RecommendationRequest`     | Alex         | chauAlex12    |
+| `MenuItemReview`            | Dagin        | Dagin-Gregory |
+| `HelpRequest`               | Erwan        | ErwanDev      |
+| `Articles`                  | Joseph       | Joseph-Foster |
+```
 
 Instructions: <https://ucsb-cs156.github.io/f23/lab/team02.html>
 
