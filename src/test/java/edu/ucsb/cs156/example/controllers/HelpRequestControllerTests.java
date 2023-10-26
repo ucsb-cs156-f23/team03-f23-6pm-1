@@ -4,10 +4,7 @@ import edu.ucsb.cs156.example.repositories.UserRepository;
 import edu.ucsb.cs156.example.testconfig.TestConfig;
 import edu.ucsb.cs156.example.ControllerTestCase;
 import edu.ucsb.cs156.example.entities.HelpRequest;
-import edu.ucsb.cs156.example.entities.UCSBDate;
 import edu.ucsb.cs156.example.repositories.HelpRequestRepository;
-import edu.ucsb.cs156.example.repositories.UCSBDateRepository;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -93,7 +90,7 @@ public class HelpRequestControllerTests extends ControllerTestCase {
                 assertEquals(expectedJson, responseString);
         }
 
-        // Tests for POST /api/ucsbdates/post...
+        // Tests for POST /api/HelpRequest/post...
 
         @Test
         public void logged_out_users_cannot_post() throws Exception {
@@ -133,6 +130,180 @@ public class HelpRequestControllerTests extends ControllerTestCase {
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
         }
+
+       // Tests for GET /api/HelpRequest?id=...
+
+       @Test
+       public void logged_out_users_cannot_get_by_id() throws Exception {
+               mockMvc.perform(get("/api/HelpRequest?id=123"))
+                               .andExpect(status().is(403)); // logged out users can't get by id
+       }
+
+       @WithMockUser(roles = { "USER" })
+       @Test
+       public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
+
+               // arrange
+               LocalDateTime ldt = LocalDateTime.parse("2022-01-03T00:00:00");
+
+                HelpRequest request = HelpRequest.builder().requesterEmail("example@ucsb.edu")
+                .teamId("f23-6pm-1").tableOrBreakoutRoom("2").requestTime(ldt)
+                .explanation("example").solved(true).build();
+
+               when(helpRequestRepository.findById(eq(123L))).thenReturn(Optional.of(request));
+
+               // act
+               MvcResult response = mockMvc.perform(get("/api/HelpRequest?id=123"))
+                               .andExpect(status().isOk()).andReturn();
+
+               // assert
+
+               verify(helpRequestRepository, times(1)).findById(eq(123L));
+               String expectedJson = mapper.writeValueAsString(request);
+               String responseString = response.getResponse().getContentAsString();
+               assertEquals(expectedJson, responseString);
+       }
+
+       @WithMockUser(roles = { "USER" })
+       @Test
+       public void test_that_logged_in_user_can_get_by_id_when_the_id_does_not_exist() throws Exception {
+
+               // arrange
+
+               when(helpRequestRepository.findById(eq(123L))).thenReturn(Optional.empty());
+
+               // act
+               MvcResult response = mockMvc.perform(get("/api/HelpRequest?id=123"))
+                               .andExpect(status().isNotFound()).andReturn();
+
+               // assert
+
+               verify(helpRequestRepository, times(1)).findById(eq(123L));
+               Map<String, Object> json = responseToJson(response);
+               assertEquals("EntityNotFoundException", json.get("type"));
+               assertEquals("HelpRequest with id 123 not found", json.get("message"));
+       }
+
+
+       // Tests for DELETE /api/HelpRequests?id=... 
+
+       @WithMockUser(roles = { "ADMIN", "USER" })
+       @Test
+       public void admin_can_delete_a_date() throws Exception {
+               // arrange
+
+               LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+
+                HelpRequest request = HelpRequest.builder().requesterEmail("example@ucsb.edu")
+                .teamId("f23-6pm-1").tableOrBreakoutRoom("2").requestTime(ldt1)
+                .explanation("example").solved(true).build();
+
+               when(helpRequestRepository.findById(eq(123L))).thenReturn(Optional.of(request));
+
+               // act
+               MvcResult response = mockMvc.perform(
+                               delete("/api/HelpRequest?id=123")
+                                               .with(csrf()))
+                               .andExpect(status().isOk()).andReturn();
+
+               // assert
+               verify(helpRequestRepository, times(1)).findById(123L);
+               verify(helpRequestRepository, times(1)).delete(any());
+
+               Map<String, Object> json = responseToJson(response);
+               assertEquals("Help request with id 123 deleted", json.get("message"));
+       }
+       
+       @WithMockUser(roles = { "ADMIN", "USER" })
+       @Test
+       public void admin_tries_to_delete_non_existant_HelpRequest_and_gets_right_error_message()
+                       throws Exception {
+               // arrange
+
+               when(helpRequestRepository.findById(eq(123L))).thenReturn(Optional.empty());
+
+               // act
+               MvcResult response = mockMvc.perform(
+                               delete("/api/HelpRequest?id=123")
+                                               .with(csrf()))
+                               .andExpect(status().isNotFound()).andReturn();
+
+               // assert
+               verify(helpRequestRepository, times(1)).findById(123L);
+               Map<String, Object> json = responseToJson(response);
+               assertEquals("HelpRequest with id 123 not found", json.get("message"));
+       }
+
+       // Tests for PUT /api/HelpRequest?id=... 
+
+       @WithMockUser(roles = { "ADMIN", "USER" })
+       @Test
+       public void admin_can_edit_an_existing_HelpRequest() throws Exception {
+               // arrange
+
+               LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+               LocalDateTime ldt2 = LocalDateTime.parse("2023-01-03T00:00:00");
+
+                HelpRequest HelpRequestOrig = HelpRequest.builder().requesterEmail("example@ucsb.edu")
+                .teamId("f23-6pm-1").tableOrBreakoutRoom("2").requestTime(ldt1)
+                .explanation("example").solved(true).build();
+
+                  HelpRequest HelpRequestEdited = HelpRequest.builder().requesterEmail("example1@ucsb.edu")
+                .teamId("f23-6pm-2").tableOrBreakoutRoom("5").requestTime(ldt2)
+                .explanation("edited").solved(false).build();
+
+               String requestBody = mapper.writeValueAsString(HelpRequestEdited);
+
+               when(helpRequestRepository.findById(eq(123L))).thenReturn(Optional.of(HelpRequestOrig));
+
+               // act
+               MvcResult response = mockMvc.perform(
+                               put("/api/HelpRequest?id=123")
+                                               .contentType(MediaType.APPLICATION_JSON)
+                                               .characterEncoding("utf-8")
+                                               .content(requestBody)
+                                               .with(csrf()))
+                               .andExpect(status().isOk()).andReturn();
+
+               // assert
+               verify(helpRequestRepository, times(1)).findById(123L);
+               verify(helpRequestRepository, times(1)).save(HelpRequestEdited); // should be saved with correct user
+               String responseString = response.getResponse().getContentAsString();
+               assertEquals(requestBody, responseString);
+       }
+
+       
+       @WithMockUser(roles = { "ADMIN", "USER" })
+       @Test
+       public void admin_cannot_edit_HelpRequest_that_does_not_exist() throws Exception {
+               // arrange
+
+               LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+
+                HelpRequest helpRequestEdited = HelpRequest.builder().requesterEmail("example@ucsb.edu")
+                .teamId("f23-6pm-1").tableOrBreakoutRoom("2").requestTime(ldt1)
+                .explanation("example").solved(true).build();
+
+               String requestBody = mapper.writeValueAsString(helpRequestEdited);
+
+               when(helpRequestRepository.findById(eq(123L))).thenReturn(Optional.empty());
+
+               // act
+               MvcResult response = mockMvc.perform(
+                               put("/api/HelpRequest?id=123")
+                                               .contentType(MediaType.APPLICATION_JSON)
+                                               .characterEncoding("utf-8")
+                                               .content(requestBody)
+                                               .with(csrf()))
+                               .andExpect(status().isNotFound()).andReturn();
+
+               // assert
+               verify(helpRequestRepository, times(1)).findById(123L);
+               Map<String, Object> json = responseToJson(response);
+               assertEquals("HelpRequest with id 123 not found", json.get("message"));
+
+       }
+
 
        
 }
