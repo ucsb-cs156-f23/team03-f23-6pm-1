@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Tag(name = "Articles")
 @RequestMapping("/api/articles")
@@ -52,7 +52,7 @@ public class ArticlesController extends ApiController {
             @Parameter(name="url") @RequestParam String url,
             @Parameter(name="explanation") @RequestParam String explanation,
             @Parameter(name="email") @RequestParam String email,
-            @Parameter(name="dateAdded", description="in iso format, e.g. YYYY-mm-ddTHH:MM:SS; see https://en.wikipedia.org/wiki/ISO_8601") @RequestParam("dateAdded") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateAdded)
+            @Parameter(name="dateAdded") @RequestParam("dateAdded") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateAdded)
             throws JsonProcessingException {
 
         // For an explanation of @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
