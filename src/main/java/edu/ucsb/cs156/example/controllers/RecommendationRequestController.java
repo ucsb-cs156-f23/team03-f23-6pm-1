@@ -6,7 +6,7 @@ import edu.ucsb.cs156.example.repositories.RecommendationRequestRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
@@ -88,8 +88,10 @@ public class RecommendationRequestController extends ApiController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("")
     public RecommendationRequest updateRecommendationRequest(
-            @Parameter(name="id") @RequestParam Long id,
-            @RequestBody @Valid RecommendationRequest incoming) {
+        @Parameter(name="id") @RequestParam Long id,
+        @RequestBody @Valid RecommendationRequest incoming) {
+        
+        log.info("incoming={}", incoming.toString());
 
         RecommendationRequest rq = recReqRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
