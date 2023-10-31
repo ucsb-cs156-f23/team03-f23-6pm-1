@@ -18,6 +18,7 @@ Deployments:
 
 * Prod: <https://team02.dokku-17.cs.ucsb.edu>
 * QA: <https://team02-qa.dokku-17.cs.ucsb.edu>
+* -MenuItemReview: <https://team02-dagingregory-dev.dokku-05.cs.ucsb.edu>
 
 # Setup before running application
 
