@@ -4,7 +4,7 @@
 |-----------------------------|--------------|---------------|
 | `UCSBDiningCommonsMenuItem` | Jake         | jakedel       |
 | `UCSBOrganization`          | Johnson      | johnsonchan105|
-| `RecommendationRequest`     | Alex         | chauAlex12    |
+| `RecommendationRequest`     | Alex         | chauAlex      |
 | `MenuItemReview`            | Dagin        | Dagin-Gregory |
 | `HelpRequest`               | Erwan        | ErwanDev      |
 | `Articles`                  | Joseph       | Joseph-Foster |
@@ -12,13 +12,10 @@
 
 Instructions: <https://ucsb-cs156.github.io/f23/lab/team02.html>
 
-TODO: Add a link to the deployed Dokku app for your team here, e.g.
-
 Deployments:
 
-* Prod: <https://team02.dokku-17.cs.ucsb.edu>
-* QA: <https://team02-qa.dokku-17.cs.ucsb.edu>
-* -MenuItemReview: <https://team02-dagingregory-dev.dokku-05.cs.ucsb.edu>
+* Prod: <https://team02.dokku-05.cs.ucsb.edu/> 
+* QA: <https://team02-qa.dokku-05.cs.ucsb.edu>
 
 # Setup before running application
 
