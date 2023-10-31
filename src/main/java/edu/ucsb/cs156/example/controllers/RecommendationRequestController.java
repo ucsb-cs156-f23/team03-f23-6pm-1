@@ -6,6 +6,7 @@ import edu.ucsb.cs156.example.repositories.RecommendationRequestRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import org.springframework.web.bind.annotation.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,11 +17,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+
+import javax.validation.Valid;
 
 @Tag(name = "RecommendationRequest")
 @RequestMapping("/api/RecommendationRequest")
@@ -78,5 +82,29 @@ public class RecommendationRequestController extends ApiController {
 
         RecommendationRequest savedRequest = recReqRepository.save(rq);
         return savedRequest;
+    }
+
+    @Operation(summary= "Update a single recommendation request")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("")
+    public RecommendationRequest updateRecommendationRequest(
+        @Parameter(name="id") @RequestParam Long id,
+        @RequestBody @Valid RecommendationRequest incoming) {
+        
+        log.info("incoming={}", incoming.toString());
+
+        RecommendationRequest rq = recReqRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+
+        rq.setRequesterEmail(incoming.getRequesterEmail());
+        rq.setProfessorEmail(incoming.getProfessorEmail());
+        rq.setExplanation(incoming.getExplanation());
+        rq.setDateRequested(incoming.getDateRequested());
+        rq.setDateNeeded(incoming.getDateNeeded());
+        rq.setDone(incoming.getDone());
+
+        recReqRepository.save(rq);
+
+        return rq;
     }
 }
