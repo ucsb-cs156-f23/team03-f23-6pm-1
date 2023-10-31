@@ -1,8 +1,8 @@
 package edu.ucsb.cs156.example.controllers;
 
-import edu.ucsb.cs156.example.entities.MenuItemReviews;
+import edu.ucsb.cs156.example.entities.MenuItemReview;
 import edu.ucsb.cs156.example.errors.EntityNotFoundException;
-import edu.ucsb.cs156.example.repositories.MenuItemReviewsRepository;
+import edu.ucsb.cs156.example.repositories.MenuItemReviewRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,27 +29,27 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @Tag(name = "MenuItemReviews")
-@RequestMapping("/api/menuitemreviews")
+@RequestMapping("/api/menuitemreview")
 @RestController
-public class MenuItemReviewsController extends ApiController{
+public class MenuItemReviewController extends ApiController{
     
     @Autowired
     ObjectMapper mapper;
 
     @Autowired
-    MenuItemReviewsRepository repo;
+    MenuItemReviewRepository repo;
     
     @Operation(summary= "Post a review from inputs in the header")
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/post")
-    MenuItemReviews postMenuItemReview( @Parameter(name = "itemId") @RequestParam Long itemId, 
+    MenuItemReview postMenuItemReview( @Parameter(name = "itemId") @RequestParam Long itemId, 
                                         @Parameter(name = "email") @RequestParam String email,
                                         @Parameter(name = "stars") @RequestParam int stars,
                                         @Parameter(name = "comments") @RequestParam String comments,
                                         @Parameter(name = "timestamp") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime timestamp
                                         )throws JsonProcessingException
                                         {
-        MenuItemReviews newReview = MenuItemReviews.builder()
+        MenuItemReview newReview = MenuItemReview.builder()
                                                     .itemId(itemId)
                                                     .reviewerEmail(email)
                                                     .stars(stars)
@@ -57,22 +57,22 @@ public class MenuItemReviewsController extends ApiController{
                                                     .dateReviewed(timestamp)
                                                     .build();
         
-        MenuItemReviews postedObj =  repo.save(newReview);
+        MenuItemReview postedObj =  repo.save(newReview);
         return postedObj;
     }
     
     @Operation(summary= "Get a single review given an id")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("")
-    MenuItemReviews getMenuItemReview(@Parameter(name = "id") @RequestParam Long id){
-        MenuItemReviews returnedItem = repo.findById(id).orElseThrow(() -> new EntityNotFoundException(MenuItemReviews.class, id));
+    MenuItemReview getMenuItemReview(@Parameter(name = "id") @RequestParam Long id){
+        MenuItemReview returnedItem = repo.findById(id).orElseThrow(() -> new EntityNotFoundException(MenuItemReview.class, id));
         return returnedItem;
     }
     @Operation(summary= "Get all reviews")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
-    Iterable<MenuItemReviews> getAllReviews(){
-        Iterable<MenuItemReviews> allItems = repo.findAll();
+    Iterable<MenuItemReview> getAllReviews(){
+        Iterable<MenuItemReview> allItems = repo.findAll();
         return allItems;
     }
 
@@ -80,20 +80,20 @@ public class MenuItemReviewsController extends ApiController{
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("")
     Object deleteItem(@Parameter(name = "id") @RequestParam Long id){
-        MenuItemReviews deletedItem = repo.findById(id)
-                                            .orElseThrow(() -> new EntityNotFoundException(MenuItemReviews.class, id));
+        MenuItemReview deletedItem = repo.findById(id)
+                                            .orElseThrow(() -> new EntityNotFoundException(MenuItemReview.class, id));
         repo.delete(deletedItem);
-        return genericMessage("MenuItemReviews with id %s deleted".formatted(id));
+        return genericMessage("MenuItemReview with id %s deleted".formatted(id));
     }
     
     @Operation(summary= "Update a single review by id")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("")
-    MenuItemReviews updateReview(@Parameter(name = "id") @RequestParam Long id, 
-                                 @RequestBody @Valid MenuItemReviews newItem
+    MenuItemReview updateReview(@Parameter(name = "id") @RequestParam Long id, 
+                                 @RequestBody @Valid MenuItemReview newItem
                                 ){
-        MenuItemReviews updatedItem = repo.findById(id)
-                                            .orElseThrow(() -> new EntityNotFoundException(MenuItemReviews.class, id));
+        MenuItemReview updatedItem = repo.findById(id)
+                                            .orElseThrow(() -> new EntityNotFoundException(MenuItemReview.class, id));
         updatedItem.setItemId(newItem.getItemId());
         updatedItem.setReviewerEmail(newItem.getReviewerEmail());
         updatedItem.setStars(newItem.getStars());
