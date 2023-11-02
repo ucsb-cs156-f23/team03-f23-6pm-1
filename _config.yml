@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-f23/team03-f23-6pm-1
 owner: ucsb-cs156-f23
 repo_name: team03-f23-6pm-1
-pull_requests: [{"author":{"id":"MDQ6VXNlcjY5Njk2Njcx","is_bot":false,"login":"Joseph-Foster","name":"Joseph Foster"},"headRefName":"JosephFoster-Table","number":66,"title":"Articles Table with tests and storybook","url":"https://github.com/ucsb-cs156-f23/team03-f23-6pm-1/pull/66"}]
+pull_requests: [{"author":{"id":"MDQ6VXNlcjM2NDk0MTY3","is_bot":false,"login":"ErwanDev","name":"Erwan"},"headRefName":"Erwan-HelpRequestPlaceholders","number":67,"title":"Placeholders for Help Requests Page","url":"https://github.com/ucsb-cs156-f23/team03-f23-6pm-1/pull/67"},{"author":{"id":"MDQ6VXNlcjY5Njk2Njcx","is_bot":false,"login":"Joseph-Foster","name":"Joseph Foster"},"headRefName":"JosephFoster-Table","number":66,"title":"Articles Table with tests and storybook","url":"https://github.com/ucsb-cs156-f23/team03-f23-6pm-1/pull/66"}]
