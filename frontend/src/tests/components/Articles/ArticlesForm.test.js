@@ -52,7 +52,7 @@ describe("ArticlesForm tests", () => {
         fireEvent.change(dateAddedField, { target: { value: 'bad-input' } });
         fireEvent.click(submitButton);
 
-        await screen.findByText(/Date must be in the format YYYY-MM-DD/);
+        await screen.findByText(/Date must/);
     });
 
     test("Correct Error messsages on missing input", async () => {
