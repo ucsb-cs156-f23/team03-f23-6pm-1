@@ -16,7 +16,7 @@ TODO: Fill in this table with correct information.
 | Table                     | Name         | Github Id |
 |---------------------------|--------------|-----------|
 | UCSBDiningCommonsMenuItem |              |           |
-| UCSBOrganization          |              |           |
+| UCSBOrganization          |Johnson Chan  |Johnsonchan105|
 | RecommendationRequest     |              |           |
 | MenuItemReview            |              |           |
 | HelpRequest               |              |           |
