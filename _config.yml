@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-f23/team03-f23-6pm-1
 owner: ucsb-cs156-f23
 repo_name: team03-f23-6pm-1
-pull_requests: []
+pull_requests: [{"author":{"id":"MDQ6VXNlcjQ0Njg5MjQw","is_bot":false,"login":"Johnsonchan105","name":"Johnson Chan"},"headRefName":"Johnsonchan105-patch-1","number":65,"title":"Update README.md","url":"https://github.com/ucsb-cs156-f23/team03-f23-6pm-1/pull/65"}]
