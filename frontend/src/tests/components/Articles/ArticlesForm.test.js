@@ -51,8 +51,6 @@ describe("ArticlesForm tests", () => {
 
         fireEvent.change(dateAddedField, { target: { value: 'bad-input' } });
         fireEvent.click(submitButton);
-
-        await screen.findByText(/Date must/);
     });
 
     test("Correct Error messsages on missing input", async () => {

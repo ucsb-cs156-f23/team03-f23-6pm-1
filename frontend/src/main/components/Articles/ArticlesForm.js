@@ -116,7 +116,6 @@ function ArticlesForm({ initialContents, submitAction, buttonLabel = "Create" })
                     />
                     <Form.Control.Feedback type="invalid">
                         {errors.dateAdded && 'DateAdded is required. '}
-                        {errors.dateAdded?.type === 'pattern' && 'Date must be in the format YYYY-MM-DD, e.g. 2023-11-02'}
                     </Form.Control.Feedback>
             </Form.Group>
 
