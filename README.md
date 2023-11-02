@@ -1,29 +1,8 @@
-<<<<<<< HEAD
 # STARTER-team03
-=======
-# team02-f23-6pm-1
-```
-| Table                       | Team Member  | Github Id     |
-|-----------------------------|--------------|---------------|
-| `UCSBDiningCommonsMenuItem` | Jake         | jakedel       |
-| `UCSBOrganization`          | Johnson      | johnsonchan105|
-| `RecommendationRequest`     | Alex         | chauAlex      |
-| `MenuItemReview`            | Dagin        | Dagin-Gregory |
-| `HelpRequest`               | Erwan        | ErwanDev      |
-| `Articles`                  | Joseph       | Joseph-Foster |
-```
->>>>>>> ff8b34f26f182b445cc3a41524f56ba37211e4b3
 
-<<<<<<< HEAD
 Instructions: <https://ucsb-cs156.github.io/f23/lab/team03.html>
 
 TODO: change heading above to your repo name, e.g. `# team03-f23-9am-4`
-=======
-Instructions: <https://ucsb-cs156.github.io/f23/lab/team02.html>
-
-<<<<<<< HEAD
-TODO: change heading above to your repo name, e.g. `# team02-f23-6pm-4`
->>>>>>> c71d0c63bc4382959325d08774b23745c6e4c177
 
 TODO: Add a link to the deployed Dokku app for your team here, e.g.
 
@@ -93,12 +72,6 @@ When complete, this application will have the following features:
 * The Delete button, for admins, will make the api call to delete the row, and then 
   navigate back to the index page.
 
-=======
-Deployments:
-
-* Prod: <https://team02.dokku-05.cs.ucsb.edu/> 
-* QA: <https://team02-qa.dokku-05.cs.ucsb.edu>
->>>>>>> ff8b34f26f182b445cc3a41524f56ba37211e4b3
 
 # Setup before running application
 
