@@ -47,6 +47,10 @@ export default function ArticlesTable({
             accessor: 'explanation',
         },
         {
+            Header: 'Email',
+            accessor: 'email',
+        },
+        {
             Header: 'Date',
             accessor: 'dateAdded',
         }
