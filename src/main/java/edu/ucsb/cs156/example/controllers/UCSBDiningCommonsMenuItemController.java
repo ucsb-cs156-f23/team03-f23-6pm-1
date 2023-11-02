@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 
-@Tag(name = "UCSBDates")
+@Tag(name = "UCSBDiningCommonsMenuItem")
 @RequestMapping("/api/UCSBDiningCommonsMenuItem")
 @RestController
 public class UCSBDiningCommonsMenuItemController extends ApiController {
