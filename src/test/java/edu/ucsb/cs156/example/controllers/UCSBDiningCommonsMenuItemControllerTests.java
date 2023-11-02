@@ -3,8 +3,8 @@ package edu.ucsb.cs156.example.controllers;
 import edu.ucsb.cs156.example.repositories.UserRepository;
 import edu.ucsb.cs156.example.testconfig.TestConfig;
 import edu.ucsb.cs156.example.ControllerTestCase;
-import edu.ucsb.cs156.example.entities.UCSBDate;
-import edu.ucsb.cs156.example.repositories.UCSBDateRepository;
+import edu.ucsb.cs156.example.entities.UCSBDiningCommonsMenuItem;
+import edu.ucsb.cs156.example.repositories.UCSBDiningCommonsMenuItemRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,8 +21,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
-import java.time.LocalDateTime;
-
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,28 +30,28 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@WebMvcTest(controllers = UCSBDatesController.class)
+@WebMvcTest(controllers = UCSBDiningCommonsMenuItemController.class)
 @Import(TestConfig.class)
-public class UCSBDatesControllerTests extends ControllerTestCase {
+public class UCSBDiningCommonsMenuItemControllerTests extends ControllerTestCase {
 
         @MockBean
-        UCSBDateRepository ucsbDateRepository;
+        UCSBDiningCommonsMenuItemRepository ucsbDiningCommonsMenuItemRepository;
 
         @MockBean
         UserRepository userRepository;
 
-        // Tests for GET /api/ucsbdates/all
+        // Tests for GET /api/UCSBDiningCommonsMenuItem/all
         
         @Test
         public void logged_out_users_cannot_get_all() throws Exception {
-                mockMvc.perform(get("/api/ucsbdates/all"))
+                mockMvc.perform(get("/api/UCSBDiningCommonsMenuItem/all"))
                                 .andExpect(status().is(403)); // logged out users can't get all
         }
 
         @WithMockUser(roles = { "USER" })
         @Test
         public void logged_in_users_can_get_all() throws Exception {
-                mockMvc.perform(get("/api/ucsbdates/all"))
+                mockMvc.perform(get("/api/UCSBDiningCommonsMenuItem/all"))
                                 .andExpect(status().is(200)); // logged
         }
 
@@ -61,52 +59,46 @@ public class UCSBDatesControllerTests extends ControllerTestCase {
         @Test
         public void logged_in_user_can_get_all_ucsbdates() throws Exception {
 
-                // arrange
-                LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
 
-                UCSBDate ucsbDate1 = UCSBDate.builder()
-                                .name("firstDayOfClasses")
-                                .quarterYYYYQ("20222")
-                                .localDateTime(ldt1)
-                                .build();
+                UCSBDiningCommonsMenuItem menuItem1 = UCSBDiningCommonsMenuItem.builder()
+                .name("food1").diningCommonsCode("ortega")
+                .station("Entree").build();      
+                
+                UCSBDiningCommonsMenuItem menuItem2 = UCSBDiningCommonsMenuItem.builder()
+                .name("food2").diningCommonsCode("ortega1")
+                .station("Entree2").build();  
 
-                LocalDateTime ldt2 = LocalDateTime.parse("2022-03-11T00:00:00");
 
-                UCSBDate ucsbDate2 = UCSBDate.builder()
-                                .name("lastDayOfClasses")
-                                .quarterYYYYQ("20222")
-                                .localDateTime(ldt2)
-                                .build();
 
-                ArrayList<UCSBDate> expectedDates = new ArrayList<>();
-                expectedDates.addAll(Arrays.asList(ucsbDate1, ucsbDate2));
+                ArrayList<UCSBDiningCommonsMenuItem> expectedItems = new ArrayList<>();
+                expectedItems.addAll(Arrays.asList(menuItem1, menuItem2));
 
-                when(ucsbDateRepository.findAll()).thenReturn(expectedDates);
+                when(ucsbDiningCommonsMenuItemRepository.findAll()).thenReturn(expectedItems);
 
                 // act
-                MvcResult response = mockMvc.perform(get("/api/ucsbdates/all"))
+                MvcResult response = mockMvc.perform(get("/api/UCSBDiningCommonsMenuItem/all"))
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
 
-                verify(ucsbDateRepository, times(1)).findAll();
-                String expectedJson = mapper.writeValueAsString(expectedDates);
+                verify(ucsbDiningCommonsMenuItemRepository, times(1)).findAll();
+                String expectedJson = mapper.writeValueAsString(expectedItems);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
         }
 
-        // Tests for POST /api/ucsbdates/post...
+        // Tests for POST /api/UCSBDiningCommonsMenuItem/post...
 
         @Test
         public void logged_out_users_cannot_post() throws Exception {
-                mockMvc.perform(post("/api/ucsbdates/post"))
+                mockMvc.perform(post("/api/UCSBDiningCommonsMenuItem/post"))
                                 .andExpect(status().is(403));
         }
 
         @WithMockUser(roles = { "USER" })
         @Test
         public void logged_in_regular_users_cannot_post() throws Exception {
-                mockMvc.perform(post("/api/ucsbdates/post"))
+                mockMvc.perform(post("/api/UCSBDiningCommonsMenuItem/post"))
                                 .andExpect(status().is(403)); // only admins can post
         }
 
@@ -115,34 +107,32 @@ public class UCSBDatesControllerTests extends ControllerTestCase {
         public void an_admin_user_can_post_a_new_ucsbdate() throws Exception {
                 // arrange
 
-                LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+              UCSBDiningCommonsMenuItem menuItem1 = UCSBDiningCommonsMenuItem.builder()
+                .name("food1").diningCommonsCode("ortega")
+                .station("Entree").build();      
+                
 
-                UCSBDate ucsbDate1 = UCSBDate.builder()
-                                .name("firstDayOfClasses")
-                                .quarterYYYYQ("20222")
-                                .localDateTime(ldt1)
-                                .build();
 
-                when(ucsbDateRepository.save(eq(ucsbDate1))).thenReturn(ucsbDate1);
+                when(ucsbDiningCommonsMenuItemRepository.save(eq(menuItem1))).thenReturn(menuItem1);
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                post("/api/ucsbdates/post?name=firstDayOfClasses&quarterYYYYQ=20222&localDateTime=2022-01-03T00:00:00")
+                                post("/api/UCSBDiningCommonsMenuItem/post?name=food1&diningCommonsCode=ortega&station=Entree")
                                                 .with(csrf()))
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
-                verify(ucsbDateRepository, times(1)).save(ucsbDate1);
-                String expectedJson = mapper.writeValueAsString(ucsbDate1);
+                verify(ucsbDiningCommonsMenuItemRepository, times(1)).save(menuItem1);
+                String expectedJson = mapper.writeValueAsString(menuItem1);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
         }
 
-        // Tests for GET /api/ucsbdates?id=...
+        // Tests for GET /api/UCSBDiningCommonsMenuItem?id=...
 
         @Test
         public void logged_out_users_cannot_get_by_id() throws Exception {
-                mockMvc.perform(get("/api/ucsbdates?id=7"))
+                mockMvc.perform(get("/api/UCSBDiningCommonsMenuItem?id=7"))
                                 .andExpect(status().is(403)); // logged out users can't get by id
         }
 
@@ -150,25 +140,20 @@ public class UCSBDatesControllerTests extends ControllerTestCase {
         @Test
         public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
 
-                // arrange
-                LocalDateTime ldt = LocalDateTime.parse("2022-01-03T00:00:00");
+                UCSBDiningCommonsMenuItem menuItem = UCSBDiningCommonsMenuItem.builder()
+                .name("food1").diningCommonsCode("ortega")
+                .station("Entree").build();   
 
-                UCSBDate ucsbDate = UCSBDate.builder()
-                                .name("firstDayOfClasses")
-                                .quarterYYYYQ("20222")
-                                .localDateTime(ldt)
-                                .build();
-
-                when(ucsbDateRepository.findById(eq(7L))).thenReturn(Optional.of(ucsbDate));
+                when(ucsbDiningCommonsMenuItemRepository.findById(eq(7L))).thenReturn(Optional.of(menuItem));
 
                 // act
-                MvcResult response = mockMvc.perform(get("/api/ucsbdates?id=7"))
+                MvcResult response = mockMvc.perform(get("/api/UCSBDiningCommonsMenuItem?id=7"))
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
 
-                verify(ucsbDateRepository, times(1)).findById(eq(7L));
-                String expectedJson = mapper.writeValueAsString(ucsbDate);
+                verify(ucsbDiningCommonsMenuItemRepository, times(1)).findById(eq(7L));
+                String expectedJson = mapper.writeValueAsString(menuItem);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
         }
@@ -179,50 +164,47 @@ public class UCSBDatesControllerTests extends ControllerTestCase {
 
                 // arrange
 
-                when(ucsbDateRepository.findById(eq(7L))).thenReturn(Optional.empty());
+                when(ucsbDiningCommonsMenuItemRepository.findById(eq(7L))).thenReturn(Optional.empty());
 
                 // act
-                MvcResult response = mockMvc.perform(get("/api/ucsbdates?id=7"))
+                MvcResult response = mockMvc.perform(get("/api/UCSBDiningCommonsMenuItem?id=7"))
                                 .andExpect(status().isNotFound()).andReturn();
 
                 // assert
 
-                verify(ucsbDateRepository, times(1)).findById(eq(7L));
+                verify(ucsbDiningCommonsMenuItemRepository, times(1)).findById(eq(7L));
                 Map<String, Object> json = responseToJson(response);
                 assertEquals("EntityNotFoundException", json.get("type"));
-                assertEquals("UCSBDate with id 7 not found", json.get("message"));
+                assertEquals("UCSBDiningCommonsMenuItem with id 7 not found", json.get("message"));
         }
 
 
-        // Tests for DELETE /api/ucsbdates?id=... 
+        // Tests for DELETE /api/UCSBDiningCommonsMenuItem?id=... 
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
         public void admin_can_delete_a_date() throws Exception {
                 // arrange
 
-                LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+              UCSBDiningCommonsMenuItem menuItem1 = UCSBDiningCommonsMenuItem.builder()
+                .name("food1").diningCommonsCode("ortega")
+                .station("Entree").build();      
+                
 
-                UCSBDate ucsbDate1 = UCSBDate.builder()
-                                .name("firstDayOfClasses")
-                                .quarterYYYYQ("20222")
-                                .localDateTime(ldt1)
-                                .build();
-
-                when(ucsbDateRepository.findById(eq(15L))).thenReturn(Optional.of(ucsbDate1));
+                when(ucsbDiningCommonsMenuItemRepository.findById(eq(15L))).thenReturn(Optional.of(menuItem1));
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                delete("/api/ucsbdates?id=15")
+                                delete("/api/UCSBDiningCommonsMenuItem?id=15")
                                                 .with(csrf()))
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
-                verify(ucsbDateRepository, times(1)).findById(15L);
-                verify(ucsbDateRepository, times(1)).delete(any());
+                verify(ucsbDiningCommonsMenuItemRepository, times(1)).findById(15L);
+                verify(ucsbDiningCommonsMenuItemRepository, times(1)).delete(any());
 
                 Map<String, Object> json = responseToJson(response);
-                assertEquals("UCSBDate with id 15 deleted", json.get("message"));
+                assertEquals("UCSBDiningCommonsMenuItem with id 15 deleted", json.get("message"));
         }
         
         @WithMockUser(roles = { "ADMIN", "USER" })
@@ -231,49 +213,43 @@ public class UCSBDatesControllerTests extends ControllerTestCase {
                         throws Exception {
                 // arrange
 
-                when(ucsbDateRepository.findById(eq(15L))).thenReturn(Optional.empty());
+                when(ucsbDiningCommonsMenuItemRepository.findById(eq(15L))).thenReturn(Optional.empty());
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                delete("/api/ucsbdates?id=15")
+                                delete("/api/UCSBDiningCommonsMenuItem?id=15")
                                                 .with(csrf()))
                                 .andExpect(status().isNotFound()).andReturn();
 
                 // assert
-                verify(ucsbDateRepository, times(1)).findById(15L);
+                verify(ucsbDiningCommonsMenuItemRepository, times(1)).findById(15L);
                 Map<String, Object> json = responseToJson(response);
-                assertEquals("UCSBDate with id 15 not found", json.get("message"));
+                assertEquals("UCSBDiningCommonsMenuItem with id 15 not found", json.get("message"));
         }
 
-        // Tests for PUT /api/ucsbdates?id=... 
+        // Tests for PUT /api/UCSBDiningCommonsMenuItem?id=... 
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
         public void admin_can_edit_an_existing_ucsbdate() throws Exception {
                 // arrange
 
-                LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
-                LocalDateTime ldt2 = LocalDateTime.parse("2023-01-03T00:00:00");
+                UCSBDiningCommonsMenuItem origin = UCSBDiningCommonsMenuItem.builder()
+                .name("food1").diningCommonsCode("ortega")
+                .station("Entree").build();      
+                
+                UCSBDiningCommonsMenuItem edited = UCSBDiningCommonsMenuItem.builder()
+                .name("food2").diningCommonsCode("ortega1")
+                .station("Entree2").build();  
 
-                UCSBDate ucsbDateOrig = UCSBDate.builder()
-                                .name("firstDayOfClasses")
-                                .quarterYYYYQ("20222")
-                                .localDateTime(ldt1)
-                                .build();
 
-                UCSBDate ucsbDateEdited = UCSBDate.builder()
-                                .name("firstDayOfFestivus")
-                                .quarterYYYYQ("20232")
-                                .localDateTime(ldt2)
-                                .build();
+                String requestBody = mapper.writeValueAsString(edited);
 
-                String requestBody = mapper.writeValueAsString(ucsbDateEdited);
-
-                when(ucsbDateRepository.findById(eq(67L))).thenReturn(Optional.of(ucsbDateOrig));
+                when(ucsbDiningCommonsMenuItemRepository.findById(eq(67L))).thenReturn(Optional.of(origin));
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                put("/api/ucsbdates?id=67")
+                                put("/api/UCSBDiningCommonsMenuItem?id=67")
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .characterEncoding("utf-8")
                                                 .content(requestBody)
@@ -281,8 +257,8 @@ public class UCSBDatesControllerTests extends ControllerTestCase {
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
-                verify(ucsbDateRepository, times(1)).findById(67L);
-                verify(ucsbDateRepository, times(1)).save(ucsbDateEdited); // should be saved with correct user
+                verify(ucsbDiningCommonsMenuItemRepository, times(1)).findById(67L);
+                verify(ucsbDiningCommonsMenuItemRepository, times(1)).save(edited); // should be saved with correct user
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(requestBody, responseString);
         }
@@ -293,21 +269,18 @@ public class UCSBDatesControllerTests extends ControllerTestCase {
         public void admin_cannot_edit_ucsbdate_that_does_not_exist() throws Exception {
                 // arrange
 
-                LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+  
+                UCSBDiningCommonsMenuItem edited = UCSBDiningCommonsMenuItem.builder()
+                .name("food2").diningCommonsCode("ortega1")
+                .station("Entree2").build();  
 
-                UCSBDate ucsbEditedDate = UCSBDate.builder()
-                                .name("firstDayOfClasses")
-                                .quarterYYYYQ("20222")
-                                .localDateTime(ldt1)
-                                .build();
+                String requestBody = mapper.writeValueAsString(edited);
 
-                String requestBody = mapper.writeValueAsString(ucsbEditedDate);
-
-                when(ucsbDateRepository.findById(eq(67L))).thenReturn(Optional.empty());
+                when(ucsbDiningCommonsMenuItemRepository.findById(eq(67L))).thenReturn(Optional.empty());
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                put("/api/ucsbdates?id=67")
+                                put("/api/UCSBDiningCommonsMenuItem?id=67")
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .characterEncoding("utf-8")
                                                 .content(requestBody)
@@ -315,9 +288,9 @@ public class UCSBDatesControllerTests extends ControllerTestCase {
                                 .andExpect(status().isNotFound()).andReturn();
 
                 // assert
-                verify(ucsbDateRepository, times(1)).findById(67L);
+                verify(ucsbDiningCommonsMenuItemRepository, times(1)).findById(67L);
                 Map<String, Object> json = responseToJson(response);
-                assertEquals("UCSBDate with id 67 not found", json.get("message"));
+                assertEquals("UCSBDiningCommonsMenuItem with id 67 not found", json.get("message"));
 
         }
 }
