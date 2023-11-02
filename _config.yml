@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-f23/team03-f23-6pm-1
 owner: ucsb-cs156-f23
 repo_name: team03-f23-6pm-1
-pull_requests: [{"author":{"id":"MDQ6VXNlcjIyNDU0MjE4","is_bot":false,"login":"Dagin-Gregory","name":"Dagin Gregory"},"headRefName":"DG","number":64,"title":"Added team02 CRUD operations","url":"https://github.com/ucsb-cs156-f23/team03-f23-6pm-1/pull/64"}]
+pull_requests: []
