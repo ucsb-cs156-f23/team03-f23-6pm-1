@@ -113,7 +113,7 @@ describe("RecommendationRequestForm tests", () => {
         fireEvent.change(explanationField, { target: { value: 'For grad school' } });
         fireEvent.change(dateRequestedField, { target: { value: '2022-03-05T10:00' } });
         fireEvent.change(dateNeededField, { target: { value: '2023-07-11T12:00' } });
-        fireEvent.change(doneField, { target: { value: true } });
+        fireEvent.click(doneField);
         fireEvent.click(submitButton);
 
         await waitFor(() => expect(mockSubmitAction).toHaveBeenCalled());
