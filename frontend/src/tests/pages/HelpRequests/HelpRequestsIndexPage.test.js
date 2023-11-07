@@ -30,7 +30,7 @@ describe("HelpRequestsIndexPage tests", () => {
         render(
             <QueryClientProvider client={queryClient}>
                 <MemoryRouter>
-                    <PlaceholderIndexPage />
+                    <HelpRequestsIndexPage/>
                 </MemoryRouter>
             </QueryClientProvider>
         );

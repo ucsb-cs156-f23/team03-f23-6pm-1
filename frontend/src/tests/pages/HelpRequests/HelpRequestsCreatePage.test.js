@@ -29,7 +29,7 @@ describe("HelpRequestsCreatePage tests", () => {
         render(
             <QueryClientProvider client={queryClient}>
                 <MemoryRouter>
-                    <PlaceholderCreatePage />
+                    <HelpRequestsCreatePage />
                 </MemoryRouter>
             </QueryClientProvider>
         );
