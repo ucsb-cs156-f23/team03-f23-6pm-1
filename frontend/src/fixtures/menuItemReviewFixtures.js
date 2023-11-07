@@ -9,7 +9,7 @@ const menuItemReviewFixtures = {
     },
     threeDates: [
         {
-            "id": 2,
+            "id": 1,
             "itemid" : 10,
             "email": "fakeRev1ewer@ucsb.edu",
             "stars": "3",
@@ -17,7 +17,7 @@ const menuItemReviewFixtures = {
             "comments": "Ok food"
         },
         {
-            "id": 3,
+            "id": 2,
             "itemid" : 10,
             "email": "fakeRev2ewer@ucsb.edu",
             "stars": "3",
@@ -25,7 +25,7 @@ const menuItemReviewFixtures = {
             "comments": "Bad food"
         },
         {
-            "id": 4,
+            "id": 3,
             "itemid" : 11,
             "email": "fakeRev3ewer@ucsb.edu",
             "stars": "2",

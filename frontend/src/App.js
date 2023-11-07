@@ -61,6 +61,21 @@ function App() {
             </>
           )
         }
+        {
+          hasRole(currentUser, "ROLE_USER") && (
+            <>
+              <Route exact path="/menuitemreview" element={<PlaceholderIndexPage />} />
+            </>
+          )
+        }
+        {
+          hasRole(currentUser, "ROLE_ADMIN") && (
+            <>
+              <Route exact path="/menuitemreview/edit/:id" element={<PlaceholderEditPage />} />
+              <Route exact path="/menuitemreview/create" element={<PlaceholderCreatePage />} />
+            </>
+          )
+        }
          {
           hasRole(currentUser, "ROLE_USER") && (
             <>

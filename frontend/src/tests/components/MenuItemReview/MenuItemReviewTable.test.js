@@ -1,6 +1,6 @@
 import { fireEvent, render, waitFor, screen } from "@testing-library/react";
-import { menuItemReviewFixtures, ucsbDatesFixtures } from "fixtures/menuItemReviewFixtures";
-import UCSBDatesTable from "main/components/MenuItemReview/MenuItemReviewTable"
+import { menuItemReviewFixtures } from "fixtures/menuItemReviewFixtures";
+import MenuItemReviewTable from "main/components/MenuItemReview/MenuItemReviewTable"
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
 import { currentUserFixtures } from "fixtures/currentUserFixtures";
@@ -16,6 +16,7 @@ jest.mock('react-router-dom', () => ({
 describe("UserTable tests", () => {
   const queryClient = new QueryClient();
 
+  
   test("Has the expected column headers and content for ordinary user", () => {
 
     const currentUser = currentUserFixtures.userOnly;
@@ -53,7 +54,7 @@ describe("UserTable tests", () => {
     expect(deleteButton).not.toBeInTheDocument();
 
   });
-
+  
   test("Has the expected colum headers and content for adminUser", () => {
 
     const currentUser = currentUserFixtures.adminUser;
@@ -93,7 +94,7 @@ describe("UserTable tests", () => {
     expect(deleteButton).toHaveClass("btn-danger");
 
   });
-
+  
   test("Edit button navigates to the edit page for admin user", async () => {
 
     const currentUser = currentUserFixtures.adminUser;
