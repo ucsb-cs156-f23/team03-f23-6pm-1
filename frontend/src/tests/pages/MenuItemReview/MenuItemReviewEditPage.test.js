@@ -1,7 +1,7 @@
 import { fireEvent, render, waitFor, screen } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
-import UCSBDatesEditPage from "main/pages/UCSBDates/UCSBDatesEditPage";
+import MenuItemReviewEditPage from "main/pages/MenuItemReview/MenuItemReviewEditPage";
 
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
@@ -27,13 +27,13 @@ jest.mock('react-router-dom', () => {
         __esModule: true,
         ...originalModule,
         useParams: () => ({
-            id: 17
+            id: 1
         }),
         Navigate: (x) => { mockNavigate(x); return null; }
     };
 });
 
-describe("UCSBDatesEditPage tests", () => {
+describe("MenuItemReviewEditPage tests", () => {
 
     describe("when the backend doesn't return data", () => {
 
@@ -44,7 +44,7 @@ describe("UCSBDatesEditPage tests", () => {
             axiosMock.resetHistory();
             axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
             axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
-            axiosMock.onGet("/api/ucsbdates", { params: { id: 17 } }).timeout();
+            axiosMock.onGet("/api/menuitemreview", { params: { id: 1 } }).timeout();
         });
 
         const queryClient = new QueryClient();
@@ -55,16 +55,16 @@ describe("UCSBDatesEditPage tests", () => {
             render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
-                        <UCSBDatesEditPage />
+                        <MenuItemReviewEditPage />
                     </MemoryRouter>
                 </QueryClientProvider>
             );
-            await screen.findByText("Edit UCSBDate");
-            expect(screen.queryByTestId("UCSBDateForm-quarterYYYYQ")).not.toBeInTheDocument();
+            await screen.findByText("Edit MenuItemReview");
+            expect(screen.queryByTestId("MenuItemReviewForm-id")).not.toBeInTheDocument();
             restoreConsole();
         });
     });
-
+    
     describe("tests where backend is working normally", () => {
 
         const axiosMock = new AxiosMockAdapter(axios);
@@ -74,17 +74,21 @@ describe("UCSBDatesEditPage tests", () => {
             axiosMock.resetHistory();
             axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
             axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
-            axiosMock.onGet("/api/ucsbdates", { params: { id: 17 } }).reply(200, {
-                id: 17,
-                quarterYYYYQ: '20221',
-                name: "Pi Day",
-                localDateTime: "2022-03-14T15:00"
+            axiosMock.onGet("/api/menuitemreview", { params: { id: 1 } }).reply(200, {
+                id: 1,
+                itemid: 2,
+                email: "fake@gmail.com",
+                stars: 3,
+                localDateTime: "2022-02-02T00:00",
+                comments: "myComment"
             });
-            axiosMock.onPut('/api/ucsbdates').reply(200, {
-                id: "17",
-                quarterYYYYQ: '20224',
-                name: "Christmas Morning",
-                localDateTime: "2022-12-25T08:00"
+            axiosMock.onPut('/api/menuitemreview').reply(200, {
+                id: "1",
+                itemid: '3',
+                email: "faker@gmail.com",
+                stars: '4',
+                localDateTime: "2022-12-25T08:00",
+                comments: "hisComment"
             });
         });
 
@@ -93,83 +97,96 @@ describe("UCSBDatesEditPage tests", () => {
             render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
-                        <UCSBDatesEditPage />
+                        <MenuItemReviewEditPage />
                     </MemoryRouter>
                 </QueryClientProvider>
             );
         });
-
+        
         test("Is populated with the data provided", async () => {
 
             render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
-                        <UCSBDatesEditPage />
+                        <MenuItemReviewEditPage />
                     </MemoryRouter>
                 </QueryClientProvider>
             );
 
-            await screen.findByTestId("UCSBDateForm-quarterYYYYQ");
+            await screen.findByTestId("MenuItemReviewForm-itemid");
+            
+            
+            const idField = screen.getByTestId("MenuItemReviewForm-id");
+            const itemidField = screen.getByTestId("MenuItemReviewForm-itemid");
+            const emailField = screen.getByTestId("MenuItemReviewForm-email");
+            const starsField = screen.getByTestId("MenuItemReviewForm-stars");
+            const localDateTimeField = screen.getByTestId("MenuItemReviewForm-localDateTime");
+            const commentsField = screen.getByTestId("MenuItemReviewForm-comments");
+            const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
 
-            const idField = screen.getByTestId("UCSBDateForm-id");
-            const quarterYYYYQField = screen.getByTestId("UCSBDateForm-quarterYYYYQ");
-            const nameField = screen.getByTestId("UCSBDateForm-name");
-            const localDateTimeField = screen.getByTestId("UCSBDateForm-localDateTime");
-            const submitButton = screen.getByTestId("UCSBDateForm-submit");
-
-            expect(idField).toHaveValue("17");
-            expect(quarterYYYYQField).toHaveValue("20221");
-            expect(nameField).toHaveValue("Pi Day");
-            expect(localDateTimeField).toHaveValue("2022-03-14T15:00");
+            expect(idField).toHaveValue("1");
+            expect(itemidField).toHaveValue("2");
+            expect(emailField).toHaveValue("fake@gmail.com");
+            expect(starsField).toHaveValue("3");
+            expect(localDateTimeField).toHaveValue("2022-02-02T00:00");
+            expect(commentsField).toHaveValue("myComment");
             expect(submitButton).toBeInTheDocument();
         });
-
+        
         test("Changes when you click Update", async () => {
 
             render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
-                        <UCSBDatesEditPage />
+                        <MenuItemReviewEditPage />
                     </MemoryRouter>
                 </QueryClientProvider>
             );
+                
+            await waitFor(() => {
+                expect(screen.getByTestId("MenuItemReviewForm-itemid")).toBeInTheDocument();
+            });
 
-            await screen.findByTestId("UCSBDateForm-quarterYYYYQ");
+            const idField = screen.getByTestId("MenuItemReviewForm-id");
+            const itemidField = screen.getByTestId("MenuItemReviewForm-itemid");
+            const emailField = screen.getByTestId("MenuItemReviewForm-email");
+            const starsField = screen.getByTestId("MenuItemReviewForm-stars");
+            const localDateTimeField = screen.getByTestId("MenuItemReviewForm-localDateTime");
+            const commentsField = screen.getByTestId("MenuItemReviewForm-comments");
+            const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
 
-            const idField = screen.getByTestId("UCSBDateForm-id");
-            const quarterYYYYQField = screen.getByTestId("UCSBDateForm-quarterYYYYQ");
-            const nameField = screen.getByTestId("UCSBDateForm-name");
-            const localDateTimeField = screen.getByTestId("UCSBDateForm-localDateTime");
-            const submitButton = screen.getByTestId("UCSBDateForm-submit");
-
-            expect(idField).toHaveValue("17");
-            expect(quarterYYYYQField).toHaveValue("20221");
-            expect(nameField).toHaveValue("Pi Day");
-            expect(localDateTimeField).toHaveValue("2022-03-14T15:00");
+            expect(idField).toHaveValue("1");
+            expect(itemidField).toHaveValue("2");
+            expect(emailField).toHaveValue("fake@gmail.com");
+            expect(starsField).toHaveValue("3");
+            expect(localDateTimeField).toHaveValue("2022-02-02T00:00");
+            expect(commentsField).toHaveValue("myComment");
 
             expect(submitButton).toBeInTheDocument();
 
-            fireEvent.change(quarterYYYYQField, { target: { value: '20224' } })
-            fireEvent.change(nameField, { target: { value: 'Christmas Morning' } })
+            fireEvent.change(itemidField, { target: { value: "3" } })
+            fireEvent.change(emailField, { target: { value: "faker@gmail.com" } })
+            fireEvent.change(starsField, { target: { value: "4" } })
             fireEvent.change(localDateTimeField, { target: { value: "2022-12-25T08:00" } })
+            fireEvent.change(commentsField, { target: { value: "hisComment" } })
 
             fireEvent.click(submitButton);
 
             await waitFor(() => expect(mockToast).toBeCalled());
-            expect(mockToast).toBeCalledWith("UCSBDate Updated - id: 17 name: Christmas Morning");
-            expect(mockNavigate).toBeCalledWith({ "to": "/ucsbdates" });
+            expect(mockToast).toBeCalledWith("MenuItemReview Updated - id: 1 email: faker@gmail.com, posted at: 2022-12-25T08:00");
+            expect(mockNavigate).toBeCalledWith({ "to": "/menuitemreview" });
 
             expect(axiosMock.history.put.length).toBe(1); // times called
-            expect(axiosMock.history.put[0].params).toEqual({ id: 17 });
+            expect(axiosMock.history.put[0].params).toEqual({ id: 1 });
             expect(axiosMock.history.put[0].data).toBe(JSON.stringify({
-                quarterYYYYQ: '20224',
-                name: "Christmas Morning",
-                localDateTime: "2022-12-25T08:00"
+                itemid: '3',
+                email: "faker@gmail.com",
+                stars: '4',
+                localDateTime: "2022-12-25T08:00",
+                comments: "hisComment"
             })); // posted object
 
         });
-
-       
     });
 });
 

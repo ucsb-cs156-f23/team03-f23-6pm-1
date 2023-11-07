@@ -13,13 +13,13 @@ export default function MenuItemReviewCreatePage({storybook=false}) {
       itemid: menuItemReview.itemid,
       email: menuItemReview.email,
       stars: menuItemReview.stars,
-      localDateTime: ucsbDate.localDateTime,
+      localDateTime: menuItemReview.localDateTime,
       comments: menuItemReview.comments
     }
   });
 
   const onSuccess = (menuItemReview) => {
-    toast(`New ucsbDate Created - id: ${menuItemReview.id} email: ${menuItemReview.email}, posted at: ${menuItemReview.localDateTime}`);
+    toast(`New menuItemReview Created - email: ${menuItemReview.email}, posted at: ${menuItemReview.localDateTime}`);
   }
 
   const mutation = useBackendMutation(
@@ -44,7 +44,7 @@ export default function MenuItemReviewCreatePage({storybook=false}) {
       <div className="pt-2">
         <h1>Create New MenuItemReview</h1>
 
-        <UCSBDateForm submitAction={onSubmit} />
+        <MenuItemReviewForm submitAction={onSubmit} />
 
       </div>
     </BasicLayout>

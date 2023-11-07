@@ -28,7 +28,7 @@ jest.mock('react-router-dom', () => {
     };
 });
 
-describe("UCSBDatesCreatePage tests", () => {
+describe("MenuItemReviewCreatePage tests", () => {
 
     const axiosMock =new AxiosMockAdapter(axios);
 
@@ -44,7 +44,7 @@ describe("UCSBDatesCreatePage tests", () => {
         render(
             <QueryClientProvider client={queryClient}>
                 <MemoryRouter>
-                    <UCSBDatesCreatePage />
+                    <MenuItemReviewCreatePage />
                 </MemoryRouter>
             </QueryClientProvider>
         );
@@ -53,51 +53,58 @@ describe("UCSBDatesCreatePage tests", () => {
     test("when you fill in the form and hit submit, it makes a request to the backend", async () => {
 
         const queryClient = new QueryClient();
-        const ucsbDate = {
-            id: 17,
-            quarterYYYYQField: 20221,
-            name: "Groundhog Day",
-            localDateTime: "2022-02-02T00:00"
+        const menuItemReview = {
+            itemid: 2,
+            email: "fake@gmail.com",
+            stars: 3,
+            localDateTime: "2022-02-02T00:00",
+            comments: "myComment"
         };
 
-        axiosMock.onPost("/api/ucsbdates/post").reply( 202, ucsbDate );
+        axiosMock.onPost("/api/menuitemreview/post").reply( 202, menuItemReview );
 
         render(
             <QueryClientProvider client={queryClient}>
                 <MemoryRouter>
-                    <UCSBDatesCreatePage />
+                    <MenuItemReviewCreatePage />
                 </MemoryRouter>
             </QueryClientProvider>
         );
 
         await waitFor(() => {
-            expect(screen.getByTestId("UCSBDateForm-quarterYYYYQ")).toBeInTheDocument();
+            expect(screen.getByTestId("MenuItemReviewForm-itemid")).toBeInTheDocument();
         });
 
-        const quarterYYYYQField = screen.getByTestId("UCSBDateForm-quarterYYYYQ");
-        const nameField = screen.getByTestId("UCSBDateForm-name");
-        const localDateTimeField = screen.getByTestId("UCSBDateForm-localDateTime");
-        const submitButton = screen.getByTestId("UCSBDateForm-submit");
+        const itemidField = screen.getByTestId("MenuItemReviewForm-itemid");
+        const emailField = screen.getByTestId("MenuItemReviewForm-email");
+        const starsField = screen.getByTestId("MenuItemReviewForm-stars");
+        const localDateTimeField = screen.getByTestId("MenuItemReviewForm-localDateTime");
+        const commentsField = screen.getByTestId("MenuItemReviewForm-comments");
+        const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
 
-        fireEvent.change(quarterYYYYQField, { target: { value: '20221' } });
-        fireEvent.change(nameField, { target: { value: 'Groundhog Day' } });
+        fireEvent.change(itemidField, { target: { value: 2 } });
+        fireEvent.change(emailField, { target: { value: "newEmail@fakemail.com" } });
+        fireEvent.change(starsField, { target: { value: 3 } });
         fireEvent.change(localDateTimeField, { target: { value: '2022-02-02T00:00' } });
+        fireEvent.change(commentsField, { target: { value: "new comment" } });
 
         expect(submitButton).toBeInTheDocument();
 
         fireEvent.click(submitButton);
 
         await waitFor(() => expect(axiosMock.history.post.length).toBe(1));
-
+        
         expect(axiosMock.history.post[0].params).toEqual(
             {
+            "itemid": "2",
+            "email": "newEmail@fakemail.com",
+            "stars": "3",
             "localDateTime": "2022-02-02T00:00",
-            "name": "Groundhog Day",
-            "quarterYYYYQ": "20221"
+            "comments": "new comment"
         });
 
-        expect(mockToast).toBeCalledWith("New ucsbDate Created - id: 17 name: Groundhog Day");
-        expect(mockNavigate).toBeCalledWith({ "to": "/ucsbdates" });
+        expect(mockToast).toBeCalledWith("New menuItemReview Created - email: fake@gmail.com, posted at: 2022-02-02T00:00");
+        expect(mockNavigate).toBeCalledWith({ "to": "/menuitemreview" });
     });
 
 

@@ -22,23 +22,23 @@ export default function MenuItemReviewEditPage({storybook=false}) {
     );
 
 
-  const objectToAxiosPutParams = (ucsbDate) => ({
+  const objectToAxiosPutParams = (menuItemReview) => ({
     url: "/api/menuitemreview",
     method: "PUT",
     params: {
-      id: ucsbDate.id,
+      id: menuItemReview.id
     },
     data: {
       itemid: menuItemReview.itemid,
       email: menuItemReview.email,
       stars: menuItemReview.stars,
-      localDateTime: ucsbDate.localDateTime,
+      localDateTime: menuItemReview.localDateTime,
       comments: menuItemReview.comments
     }
   });
 
   const onSuccess = (menuItemReview) => {
-    toast(`New ucsbDate Created - id: ${menuItemReview.id} email: ${menuItemReview.email}, posted at: ${menuItemReview.localDateTime}`);
+    toast(`MenuItemReview Updated - id: ${menuItemReview.id} email: ${menuItemReview.email}, posted at: ${menuItemReview.localDateTime}`);
   }
 
   const mutation = useBackendMutation(
