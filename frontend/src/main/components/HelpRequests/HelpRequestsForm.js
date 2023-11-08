@@ -124,19 +124,16 @@ function HelpRequestsForm({ initialContents, submitAction, buttonLabel = "Create
             </Form.Group>
 
             <Form.Group className="mb-3" >
-                <Form.Label htmlFor="solved">Solved</Form.Label>
-                <Form.Control
-                    data-testid={testIdPrefix + "-solved"}
-                    id="solved"
-                    type="boolean"
-                    isInvalid={Boolean(errors.solved)}
-                    {...register("solved", {
-                        required: "Solved is required."
-                    })}
-                />
-                <Form.Control.Feedback type="invalid">
-                    {errors.solved?.message}
-                </Form.Control.Feedback>
+                        <Form.Check 
+                            type="switch"
+                            data-testid={testIdPrefix + "-solved"}
+                            id="solved"
+                            label="Solved?"
+                            {...register("solved", {})}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.solved?.message}
+                        </Form.Control.Feedback>
             </Form.Group>
 
             <Button
