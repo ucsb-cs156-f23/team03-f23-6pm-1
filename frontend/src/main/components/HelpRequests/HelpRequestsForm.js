@@ -23,10 +23,7 @@ function HelpRequestsForm({ initialContents, submitAction, buttonLabel = "Create
 
     const email_regex = /[a-z0-9]+@[a-z]+.[a-z]{2,3}/;
 
-    const teamid_regex = /[sfwm]\d{2}-(([1-12]am)|([1-12]pm))-[1-4]$/
-
-
-    // f23-6pm-1
+    const teamid_regex = /[sfwm]\d{2}-((([1-9]|1[012])am)|(([1-9]|1[012])pm))-[1-4]$/
 
     return (
         <Form onSubmit={handleSubmit(submitAction)}>
@@ -62,20 +59,20 @@ function HelpRequestsForm({ initialContents, submitAction, buttonLabel = "Create
             </Form.Group>
 
             <Form.Group className="mb-3" >
-                <Form.Label htmlFor="teamId">Team ID</Form.Label>
+                <Form.Label htmlFor="teamId">TeamID</Form.Label>
                 <Form.Control
                     data-testid={testIdPrefix + "-teamId"}
                     id="teamId"
                     type="text"
-                    isInvalid={Boolean(errors.teamid)}
+                    isInvalid={Boolean(errors.teamId)}
                     {...register("teamId", {
                         required: true,
                         pattern: teamid_regex
                     })}
                 />
                 <Form.Control.Feedback type="invalid">
-                    {errors.teamid && 'Team ID is required. '}
-                    {errors.teamid?.type === 'pattern' && 'Team ID must be a valid team id.'}
+                    {errors.teamId && 'Team ID is required.'}
+                    {errors.teamId?.type === 'pattern' && 'Team ID must be a valid team id.'}
                 </Form.Control.Feedback>
             </Form.Group>
 
@@ -96,16 +93,16 @@ function HelpRequestsForm({ initialContents, submitAction, buttonLabel = "Create
             </Form.Group>
 
             <Form.Group className="mb-3" >
-                        <Form.Label htmlFor="requestTime">Request Time (iso format)</Form.Label>
+                        <Form.Label htmlFor="requestTime">Request Time ISO Format</Form.Label>
                         <Form.Control
-                            data-testid="requestTime"
+                            data-testid={testIdPrefix + "-requestTime"}
                             id="requestTime"
                             type="datetime-local"
                             isInvalid={Boolean(errors.requestTime)}
                             {...register("requestTime", { required: true, pattern: isodate_regex })}
                         />
                         <Form.Control.Feedback type="invalid">
-                            {errors.requestTime && 'Request time is required. '}
+                            {errors.requestTime && 'Request time is required and must be provided in ISO format.'}
                         </Form.Control.Feedback>
             </Form.Group>
 

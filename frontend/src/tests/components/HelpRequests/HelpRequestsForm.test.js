@@ -1,7 +1,7 @@
 import { render, waitFor, fireEvent, screen } from "@testing-library/react";
 import HelpRequestsForm from "main/components/HelpRequests/HelpRequestsForm";
-import { helpRequestsFixtures } from "fixtures/helpRequestFixtures";
 import { BrowserRouter as Router } from "react-router-dom";
+import { helpRequestFixtures } from "fixtures/helpRequestFixtures";
 
 const mockedNavigate = jest.fn();
 
@@ -20,11 +20,11 @@ describe("HelpRequestsForm tests", () => {
                 <HelpRequestsForm />
             </Router>
         );
-        await screen.findByText(/Id/);
+        await screen.findByText(/ID/);
         await screen.findByText(/Requester Email/);
-        await screen.findByText(/Team ID/);
+        await screen.findByText(/TeamID/);
         await screen.findByText(/Table Or Breakout Room/);
-        await screen.findByText(/Request Time (iso format)/);
+        await screen.findByText(/Request Time ISO Format/);
         await screen.findByText(/Explanation/);
         await screen.findByText(/Solved/);
         await screen.findByText(/Create/);
@@ -35,11 +35,11 @@ describe("HelpRequestsForm tests", () => {
 
         render(
             <Router  >
-                <HelpRequestsForm initialContents={helpRequestsFixtures.oneHelpRequest} />
+                <HelpRequestsForm initialContents={helpRequestFixtures.oneHelpRequest} />
             </Router>
         );
         await screen.findByTestId(/HelpRequestsForm-id/);
-        expect(screen.getByText(/Id/)).toBeInTheDocument();
+        expect(screen.getByText(/ID/)).toBeInTheDocument();
         expect(screen.getByTestId(/HelpRequestsForm-id/)).toHaveValue("1");
     });
 
@@ -61,11 +61,9 @@ describe("HelpRequestsForm tests", () => {
         fireEvent.change(requestTimeField, { target: { value: 'bad-input' } });
         fireEvent.click(submitButton);
 
-
-        expect(screen.queryByText(/Requester email must be a valid email./)).toBeInTheDocument();
-        expect(screen.queryByText(/Team ID must be a valid team id./)).toBeInTheDocument();
-        expect(screen.queryByText(/Request time must be in ISO format./)).toBeInTheDocument();
-
+        await screen.findByText(/Requester email must be a valid email./);
+        await screen.findByText(/Team ID must be a valid team id./);
+        await screen.findByText(/Request time is required and must be provided in ISO format./);
     });
 
     test("Correct Error messsages on missing input", async () => {
@@ -83,7 +81,7 @@ describe("HelpRequestsForm tests", () => {
         await screen.findByText(/Requester Email is required./);
         expect(screen.getByText(/Team ID is required./)).toBeInTheDocument();
         expect(screen.getByText(/Table or Breakout Room is required./)).toBeInTheDocument();
-        expect(screen.getByText(/Request time is required./)).toBeInTheDocument();
+        expect(screen.getByText(/Request time is required and must be provided in ISO format./)).toBeInTheDocument();
         expect(screen.getByText(/Explanation is required./)).toBeInTheDocument();
         expect(screen.getByText(/Solved is required./)).toBeInTheDocument();
     });
@@ -120,7 +118,7 @@ describe("HelpRequestsForm tests", () => {
 
         expect(screen.queryByText(/Requester email must be a valid email./)).not.toBeInTheDocument();
         expect(screen.queryByText(/Team ID must be a valid team id./)).not.toBeInTheDocument();
-        expect(screen.queryByText(/Request time must be in ISO format./)).not.toBeInTheDocument();
+        expect(screen.queryByText(/Request time is required and must be provided in ISO format./)).not.toBeInTheDocument();
 
     });
 
