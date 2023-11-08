@@ -1,6 +1,5 @@
 import { fireEvent, render, waitFor, screen } from "@testing-library/react";
-import { helpRequestFixtures, restaurantFixtures } from "fixtures/helpRequestFixtures";
-import RestaurantTable from "main/components/HelpRequests/HelpRequestsTable";
+import { helpRequestFixtures } from "fixtures/helpRequestFixtures";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
 import { currentUserFixtures } from "fixtures/currentUserFixtures";
@@ -158,7 +157,7 @@ describe("HelpRequests tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <HelpRequestsTable restaurants={helpRequestFixtures.threeHelpRequests} currentUser={currentUser} />
+          <HelpRequestsTable requests={helpRequestFixtures.threeHelpRequests} currentUser={currentUser} />
         </MemoryRouter>
       </QueryClientProvider>
     );

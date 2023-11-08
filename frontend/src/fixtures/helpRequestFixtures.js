@@ -1,5 +1,4 @@
 const helpRequestFixtures = {
-   
     oneHelpRequest:
     [
       {

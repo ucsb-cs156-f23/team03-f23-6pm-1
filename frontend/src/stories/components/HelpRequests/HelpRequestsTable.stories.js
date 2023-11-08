@@ -1,6 +1,5 @@
 import React from 'react';
-import RestaurantTable from 'main/components/HelpRequests/HelpRequestsTable';
-import { helpRequestFixtures, restaurantFixtures } from 'fixtures/helpRequestFixtures';
+import { helpRequestFixtures} from 'fixtures/helpRequestFixtures';
 import { currentUserFixtures } from 'fixtures/currentUserFixtures';
 import { rest } from "msw";
 import HelpRequestsTable from 'main/components/HelpRequests/HelpRequestsTable';
