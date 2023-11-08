@@ -88,7 +88,7 @@ describe("HelpRequestsIndexPage tests", () => {
         expect(screen.getByTestId(`${testId}-cell-row-2-col-id`)).toHaveTextContent("4");
 
         // assert that the Create button is not present when user isn't an admin
-        expect(screen.queryByText(/Create Help Requests/)).not.toBeInTheDocument();
+        expect(screen.queryByText(/Create Help Request/)).not.toBeInTheDocument();
 
     });
 
