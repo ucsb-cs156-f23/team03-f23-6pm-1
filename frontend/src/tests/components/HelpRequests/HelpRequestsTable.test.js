@@ -17,7 +17,7 @@ describe("HelpRequests tests", () => {
   const queryClient = new QueryClient();
 
   const expectedHeaders = ["id", "RequesterEmail", "TeamId", "TableOrBreakoutRoom", "RequestTime", "Explanation", "Solved"];
-  const expectedFields = ["id", "requesterEmail", "teamId", "tableOrBreakoutRoom", "requestTime", "explanation", "solved"];
+  const expectedFields = ["id", "requesterEmail", "teamId", "tableOrBreakoutRoom", "requestTime", "explanation", "Solved"];
   const testId = "HelpRequestsTable";
 
   test("renders empty table correctly", () => {
@@ -70,9 +70,11 @@ describe("HelpRequests tests", () => {
       expect(header).toBeInTheDocument();
     });
 
+    expect(screen.getByTestId(`${testId}-cell-row-0-col-Solved`)).toHaveTextContent("false");
     expect(screen.getByTestId(`${testId}-cell-row-0-col-id`)).toHaveTextContent("2");
     expect(screen.getByTestId(`${testId}-cell-row-0-col-requesterEmail`)).toHaveTextContent("example1@ucsb.edu");
 
+    expect(screen.getByTestId(`${testId}-cell-row-1-col-Solved`)).toHaveTextContent("false");
     expect(screen.getByTestId(`${testId}-cell-row-1-col-id`)).toHaveTextContent("3");
     expect(screen.getByTestId(`${testId}-cell-row-1-col-requesterEmail`)).toHaveTextContent("example2@ucsb.edu");
 
@@ -110,9 +112,10 @@ describe("HelpRequests tests", () => {
       expect(header).toBeInTheDocument();
     });
 
+    expect(screen.getByTestId(`${testId}-cell-row-0-col-Solved`)).toHaveTextContent("false");
     expect(screen.getByTestId(`${testId}-cell-row-0-col-id`)).toHaveTextContent("2");
     expect(screen.getByTestId(`${testId}-cell-row-0-col-requesterEmail`)).toHaveTextContent("example1@ucsb.edu");
-
+    expect(screen.getByTestId(`${testId}-cell-row-1-col-Solved`)).toHaveTextContent("false");
     expect(screen.getByTestId(`${testId}-cell-row-1-col-id`)).toHaveTextContent("3");
     expect(screen.getByTestId(`${testId}-cell-row-1-col-requesterEmail`)).toHaveTextContent("example2@ucsb.edu");
 
@@ -136,6 +139,7 @@ describe("HelpRequests tests", () => {
 
     // assert - check that the expected content is rendered
     expect(await screen.findByTestId(`${testId}-cell-row-0-col-id`)).toHaveTextContent("2");
+    expect(screen.getByTestId(`${testId}-cell-row-0-col-Solved`)).toHaveTextContent("false");
     expect(screen.getByTestId(`${testId}-cell-row-0-col-requesterEmail`)).toHaveTextContent("example1@ucsb.edu");
 
     const editButton = screen.getByTestId(`${testId}-cell-row-0-col-Edit-button`);
@@ -164,6 +168,7 @@ describe("HelpRequests tests", () => {
 
     // assert - check that the expected content is rendered
     expect(await screen.findByTestId(`${testId}-cell-row-0-col-id`)).toHaveTextContent("2");
+    expect(screen.getByTestId(`${testId}-cell-row-0-col-Solved`)).toHaveTextContent("false");
     expect(screen.getByTestId(`${testId}-cell-row-0-col-requesterEmail`)).toHaveTextContent("example1@ucsb.edu");
 
     const deleteButton = screen.getByTestId(`${testId}-cell-row-0-col-Delete-button`);
