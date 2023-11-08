@@ -83,7 +83,6 @@ describe("HelpRequestsForm tests", () => {
         expect(screen.getByText(/Table or Breakout Room is required./)).toBeInTheDocument();
         expect(screen.getByText(/Request time is required and must be provided in ISO format./)).toBeInTheDocument();
         expect(screen.getByText(/Explanation is required./)).toBeInTheDocument();
-        expect(screen.getByText(/Solved is required./)).toBeInTheDocument();
     });
 
     test("No Error messsages on good input", async () => {
@@ -111,7 +110,7 @@ describe("HelpRequestsForm tests", () => {
         fireEvent.change(tableOrBreakoutRoomField, { target: { value: '12' } });
         fireEvent.change(requestTimeField, { target: { value: '2022-01-02T12:00' } });
         fireEvent.change(explanationField, { target: { value: 'newexplanation' } });
-        fireEvent.change(solvedField, { target: { value: 'true' } });
+        fireEvent.click(solvedField);
         fireEvent.click(submitButton);
 
         await waitFor(() => expect(mockSubmitAction).toHaveBeenCalled());
