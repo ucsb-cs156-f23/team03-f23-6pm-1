@@ -70,6 +70,16 @@ describe("MenuItemReviewForm tests", () => {
         expect(screen.getByText(/Date requested must be in ISO format/)).toBeInTheDocument();
         expect(screen.getByText(/Must be a valid email/)).toBeInTheDocument();
         expect(screen.getByText(/Must input a rating 0-5/)).toBeInTheDocument();
+
+        fireEvent.change(emailField, { target: { value: 'newEmail@fakemail' } });
+
+        await screen.findByText(/Must be a valid email/);
+        expect(screen.getByText(/Must be a valid email/)).toBeInTheDocument();
+
+        fireEvent.change(emailField, { target: { value: 'newEmail' } });
+
+        await screen.findByText(/Must be a valid email/);
+        expect(screen.getByText(/Must be a valid email/)).toBeInTheDocument();
     });
 
     

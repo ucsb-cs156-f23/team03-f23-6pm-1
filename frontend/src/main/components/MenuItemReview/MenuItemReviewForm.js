@@ -69,7 +69,6 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.email && 'Must be a valid email'}
-                            {errors.email?.type === 'pattern' && 'email must be a valid email.'}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>

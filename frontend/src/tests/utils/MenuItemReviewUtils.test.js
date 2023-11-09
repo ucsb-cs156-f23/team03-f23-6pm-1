@@ -49,6 +49,21 @@ describe("MenuItemReviewUtils", () => {
             });
         });
 
+        test("Must pass in a parameter", () => {
+            // arrange
+            const cell = { row: { values: {} } };
+
+            // act
+            const result = cellToAxiosParamsDelete(cell);
+
+            // assert
+            expect(result).toEqual({
+                url: "/api/menuitemreview",
+                method: "DELETE",
+                params: {}
+            });
+        });
+
     });
 });
 
