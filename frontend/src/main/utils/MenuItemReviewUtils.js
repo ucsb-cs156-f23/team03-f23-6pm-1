@@ -6,7 +6,7 @@ export function onDeleteSuccess(message) {
 }
 
 export function cellToAxiosParamsDelete(cell) {
-    if(cell.row.values.id != undefined){
+    if(cell.row.values.id !== undefined){
         return {
             url: "/api/menuitemreview",
             method: "DELETE",
