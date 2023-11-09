@@ -60,7 +60,9 @@ describe("MenuItemReviewUtils", () => {
             expect(result).toEqual({
                 url: "/api/menuitemreview",
                 method: "DELETE",
-                params: {}
+                params: {
+                    "id": undefined
+                }
             });
         });
 
