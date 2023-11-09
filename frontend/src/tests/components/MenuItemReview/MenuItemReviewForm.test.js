@@ -68,18 +68,7 @@ describe("MenuItemReviewForm tests", () => {
 
         await screen.findByText(/Date requested must be in ISO format/);
         expect(screen.getByText(/Date requested must be in ISO format/)).toBeInTheDocument();
-        expect(screen.getByText(/Must be a valid email/)).toBeInTheDocument();
         expect(screen.getByText(/Must input a rating 0-5/)).toBeInTheDocument();
-
-        fireEvent.change(emailField, { target: { value: 'newEmail@fakemail' } });
-
-        await screen.findByText(/Must be a valid email/);
-        expect(screen.getByText(/Must be a valid email/)).toBeInTheDocument();
-
-        fireEvent.change(emailField, { target: { value: 'newEmail' } });
-
-        await screen.findByText(/Must be a valid email/);
-        expect(screen.getByText(/Must be a valid email/)).toBeInTheDocument();
     });
 
     
@@ -97,7 +86,6 @@ describe("MenuItemReviewForm tests", () => {
 
         await screen.findByText(/Date requested must be in ISO format/);
         expect(screen.getByText(/Date requested must be in ISO format/)).toBeInTheDocument();
-        expect(screen.getByText(/Must be a valid email/)).toBeInTheDocument();
         expect(screen.getByText(/Must input a rating 0-5/)).toBeInTheDocument();
 
     });
@@ -131,7 +119,6 @@ describe("MenuItemReviewForm tests", () => {
         await waitFor(() => expect(mockSubmitAction).toHaveBeenCalled());
 
         expect(screen.queryByText(/Date requested must be in ISO format/)).not.toBeInTheDocument();
-        expect(screen.queryByText(/Must be a valid email/)).not.toBeInTheDocument();
         expect(screen.queryByText(/Must input a rating 0-5/)).not.toBeInTheDocument();
 
     });

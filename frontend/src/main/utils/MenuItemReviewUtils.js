@@ -6,19 +6,19 @@ export function onDeleteSuccess(message) {
 }
 
 export function cellToAxiosParamsDelete(cell) {
-    if(cell.row.values.id !== undefined){
+    if(cell.row.values.id === null || cell.row.values.id === undefined){
         return {
             url: "/api/menuitemreview",
             method: "DELETE",
-            params: {
-                id: cell.row.values.id
-            }
+            params: {}
         }
     }
     return {
         url: "/api/menuitemreview",
         method: "DELETE",
-        params: {}
+        params: {
+            id: cell.row.values.id
+        }
     }
 }
 
