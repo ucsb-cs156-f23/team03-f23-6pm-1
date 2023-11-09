@@ -55,6 +55,13 @@ describe("UCSBOrganizationForm tests", () => {
 
         expect(await screen.findByTestId(`${testId}-orgCode`)).toBeInTheDocument();
         expect(screen.getByText(`orgCode`)).toBeInTheDocument();
+        expect(await screen.findByTestId(`${testId}-orgTranslationShort`)).toBeInTheDocument();
+        expect(screen.getByText(`orgTranslationShort`)).toBeInTheDocument()
+        expect(await screen.findByTestId(`${testId}-orgTranslation`)).toBeInTheDocument();
+        expect(screen.getByText(`orgTranslation`)).toBeInTheDocument();
+        expect(await screen.findByTestId(`${testId}-inactive`)).toBeInTheDocument();
+        expect(screen.getByText(`Inactive`)).toBeInTheDocument();
+        
     });
 
 
@@ -69,7 +76,12 @@ describe("UCSBOrganizationForm tests", () => {
         expect(await screen.findByTestId(`${testId}-cancel`)).toBeInTheDocument();
         const cancelButton = screen.getByTestId(`${testId}-cancel`);
 
+        expect(await screen.findByTestId(`${testId}-submit`)).toBeInTheDocument();
+        const submitButton = screen.getByTestId(`${testId}-submit`);
+
         fireEvent.click(cancelButton);
+
+        fireEvent.click(submitButton)
 
         await waitFor(() => expect(mockedNavigate).toHaveBeenCalledWith(-1));
     });
@@ -87,6 +99,8 @@ describe("UCSBOrganizationForm tests", () => {
         const submitButton = screen.getByText(/Create/);
         fireEvent.click(submitButton);
 
+        await screen.findByText(/orgCode is required/);
+        await screen.findByText(/inactive is required/);
         await screen.findByText(/orgTranslationShort is required/);
         expect(screen.getByText(/orgTranslation is required/)).toBeInTheDocument();
 
