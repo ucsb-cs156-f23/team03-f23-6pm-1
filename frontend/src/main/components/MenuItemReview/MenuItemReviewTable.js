@@ -41,7 +41,7 @@ export default function MenuItemReviewTable({ dates, currentUser }) {
             accessor: 'email',
         },
         {
-            Header: 'stars',
+            Header: 'Rating',
             accessor: 'stars',
         },
         {
@@ -49,7 +49,7 @@ export default function MenuItemReviewTable({ dates, currentUser }) {
             accessor: 'localDateTime',
         },
         {
-            Header: 'comments',
+            Header: 'Comments',
             accessor: 'comments',
         }
     ];

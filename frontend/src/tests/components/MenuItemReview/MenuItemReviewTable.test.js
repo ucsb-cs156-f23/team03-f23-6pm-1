@@ -30,7 +30,7 @@ describe("UserTable tests", () => {
 
     );
 
-    const expectedHeaders = ["id", "itemId", "reviewerEmail", "stars", "dateReviewed", "comments"];
+    const expectedHeaders = ["id", "itemId", "reviewerEmail", "Rating", "dateReviewed", "Comments"];
     const expectedFields = ["id", "itemid", "email", "stars", "localDateTime", "comments"];
     const testId = "MenuItemReviewTable";
 
@@ -68,7 +68,7 @@ describe("UserTable tests", () => {
 
     );
 
-    const expectedHeaders = ["id", "itemId", "reviewerEmail", "stars", "dateReviewed", "comments"];
+    const expectedHeaders = ["id", "itemId", "reviewerEmail", "Rating", "dateReviewed", "Comments"];
     const expectedFields = ["id", "itemid", "email", "stars", "localDateTime", "comments"];
     const testId = "MenuItemReviewTable";
 
