@@ -26,7 +26,7 @@ jest.mock('react-router-dom', () => {
         __esModule: true,
         ...originalModule,
         useParams: () => ({
-            id: 17
+            orgCode: "SKY"
         }),
         Navigate: (x) => { mockNavigate(x); return null; }
     };
@@ -130,7 +130,6 @@ describe("UCSBOrganizationEditPage tests", () => {
             expect(axiosMock.history.put.length).toBe(1); // times called
             expect(axiosMock.history.put[0].params).toEqual({ orgCode: "SKY" });
             expect(axiosMock.history.put[0].data).toBe(JSON.stringify({
-                orgCode: "SKY",
                 orgTranslationShort: "CLUB SKYDIVING",
                 orgTranslation: "SKYDIVING AT UCSB UCSB",
                 inactive: "false"
