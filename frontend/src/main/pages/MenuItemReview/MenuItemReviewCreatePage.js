@@ -14,7 +14,7 @@ export default function MenuItemReviewCreatePage({storybook=false}) {
       email: menuItemReview.email,
       stars: menuItemReview.stars,
       comments: menuItemReview.comments,
-      timestamp: menuItemReview.localDateTime
+      timestamp: menuItemReview.stars
     }
   });
 
