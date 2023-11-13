@@ -86,7 +86,7 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
 
                 <Col>
                     <Form.Group className="mb-3" >
-                        <Form.Label htmlFor="localDateTime">localDateTime (iso format)</Form.Label>
+                        <Form.Label htmlFor="localDateTime">Date (iso format)</Form.Label>
                         <Form.Control
                             data-testid="MenuItemReviewForm-localDateTime"
                             id="localDateTime"
