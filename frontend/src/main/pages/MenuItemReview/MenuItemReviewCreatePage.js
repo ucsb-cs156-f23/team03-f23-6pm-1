@@ -10,7 +10,7 @@ export default function MenuItemReviewCreatePage({storybook=false}) {
     url: "/api/menuitemreview/post",
     method: "POST",
     params: {
-      itemId: menuItemReview.itemid,
+      itemid: menuItemReview.itemid,
       email: menuItemReview.email,
       stars: menuItemReview.stars,
       comments: menuItemReview.comments,

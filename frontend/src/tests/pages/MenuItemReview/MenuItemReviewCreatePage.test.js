@@ -54,7 +54,7 @@ describe("MenuItemReviewCreatePage tests", () => {
 
         const queryClient = new QueryClient();
         const menuItemReview = {
-            itemId: 2,
+            itemid: 2,
             email: "fake@gmail.com",
             stars: 3,
             timestamp: "2022-02-02T00:00",
@@ -96,7 +96,7 @@ describe("MenuItemReviewCreatePage tests", () => {
         
         expect(axiosMock.history.post[0].params).toEqual(
             {
-            "itemId": "2",
+            "itemid": "2",
             "email": "newEmail@fakemail.com",
             "stars": "3",
             "timestamp": "2022-02-02T00:00",
