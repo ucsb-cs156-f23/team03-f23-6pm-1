@@ -167,7 +167,7 @@ describe("AppNavbar tests", () => {
         await screen.findByText("Help Requests");
         const link = screen.getByText("Help Requests");
         expect(link).toBeInTheDocument();
-        expect(link.getAttribute("href")).toBe("/helprequests");
+        expect(link.getAttribute("href")).toBe("/HelpRequest");
     });
 
     test("renders the restaurants link correctly", async () => {
