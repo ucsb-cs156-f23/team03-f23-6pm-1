@@ -30,8 +30,8 @@ describe("UserTable tests", () => {
 
     );
 
-    const expectedHeaders = ["id", "itemId", "reviewerEmail", "Rating", "dateReviewed", "Comments"];
-    const expectedFields = ["id", "itemid", "email", "stars", "localDateTime", "comments"];
+    const expectedHeaders = ["id", "ItemId", "reviewerEmail", "Rating", "dateReviewed", "Comments"];
+    const expectedFields = ["id", "itemId", "email", "stars", "timestamp", "comments"];
     const testId = "MenuItemReviewTable";
 
     expectedHeaders.forEach((headerText) => {
@@ -68,8 +68,8 @@ describe("UserTable tests", () => {
 
     );
 
-    const expectedHeaders = ["id", "itemId", "reviewerEmail", "Rating", "dateReviewed", "Comments"];
-    const expectedFields = ["id", "itemid", "email", "stars", "localDateTime", "comments"];
+    const expectedHeaders = ["id", "ItemId", "reviewerEmail", "Rating", "dateReviewed", "Comments"];
+    const expectedFields = ["id", "itemId", "email", "stars", "timestamp", "comments"];
     const testId = "MenuItemReviewTable";
 
     expectedHeaders.forEach((headerText) => {

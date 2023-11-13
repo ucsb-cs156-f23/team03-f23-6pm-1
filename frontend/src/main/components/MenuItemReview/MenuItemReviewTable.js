@@ -33,8 +33,8 @@ export default function MenuItemReviewTable({ dates, currentUser }) {
             accessor: 'id', // accessor is the "key" in the data
         },
         {
-            Header: 'itemId',
-            accessor: 'itemid', // accessor is the "key" in the data
+            Header: 'ItemId',
+            accessor: 'itemId', // accessor is the "key" in the data
         },
         {
             Header: 'reviewerEmail',
@@ -45,12 +45,12 @@ export default function MenuItemReviewTable({ dates, currentUser }) {
             accessor: 'stars',
         },
         {
-            Header: 'dateReviewed',
-            accessor: 'localDateTime',
-        },
-        {
             Header: 'Comments',
             accessor: 'comments',
+        },
+        {
+            Header: 'dateReviewed',
+            accessor: 'timestamp',
         }
     ];
 

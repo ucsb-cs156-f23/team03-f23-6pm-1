@@ -46,12 +46,12 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
 
                 <Col>
                     <Form.Group className="mb-3" >
-                        <Form.Label htmlFor="itemid">itemid</Form.Label>
+                        <Form.Label htmlFor="itemId">Item Number</Form.Label>
                         <Form.Control
-                            data-testid="MenuItemReviewForm-itemid"
-                            id="itemid"
+                            data-testid="MenuItemReviewForm-itemId"
+                            id="itemId"
                             type="text"
-                            {...register("itemid")}
+                            {...register("itemId")}
                         />
                     </Form.Group>
                 </Col>
@@ -86,16 +86,16 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
 
                 <Col>
                     <Form.Group className="mb-3" >
-                        <Form.Label htmlFor="localDateTime">Date (iso format)</Form.Label>
+                        <Form.Label htmlFor="timestamp">Date (iso format)</Form.Label>
                         <Form.Control
-                            data-testid="MenuItemReviewForm-localDateTime"
-                            id="localDateTime"
+                            data-testid="MenuItemReviewForm-timestamp"
+                            id="timestamp"
                             type="datetime-local"
-                            isInvalid={Boolean(errors.localDateTime)}
-                            {...register("localDateTime", { required: true, pattern: isodate_regex })}
+                            isInvalid={Boolean(errors.timestamp)}
+                            {...register("timestamp", { required: true, pattern: isodate_regex })}
                         />
                         <Form.Control.Feedback type="invalid">
-                            {errors.localDateTime && 'Date requested must be in ISO format'}
+                            {errors.timestamp && 'Date requested must be in ISO format'}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>

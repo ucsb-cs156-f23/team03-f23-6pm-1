@@ -20,11 +20,11 @@ describe("MenuItemReviewForm tests", () => {
                 <MenuItemReviewForm />
             </Router>
         );
-        await screen.findByTestId(/id/);
-        await screen.findByTestId(/itemid/);
+        await screen.findByTestId(/Id/);
+        await screen.findByTestId(/itemId/);
         await screen.findByTestId(/email/);
         await screen.findByTestId(/stars/);
-        await screen.findByTestId(/localDateTime/);
+        await screen.findByTestId(/timestamp/);
         await screen.findByTestId(/comments/);
         await screen.findByText(/Create/);
     });
@@ -50,11 +50,11 @@ describe("MenuItemReviewForm tests", () => {
                 <MenuItemReviewForm />
             </Router>
         );
-        await screen.findByTestId("MenuItemReviewForm-itemid");
-        const itemIdField = screen.getByTestId("MenuItemReviewForm-itemid");
+        await screen.findByTestId("MenuItemReviewForm-itemId");
+        const itemIdField = screen.getByTestId("MenuItemReviewForm-itemId");
         const emailField = screen.getByTestId("MenuItemReviewForm-email");
         const starsField = screen.getByTestId("MenuItemReviewForm-stars");
-        const localDateTimeField = screen.getByTestId("MenuItemReviewForm-localDateTime");
+        const localDateTimeField = screen.getByTestId("MenuItemReviewForm-timestamp");
         const commentsField = screen.getByTestId("MenuItemReviewForm-comments");
 
         const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
@@ -100,12 +100,12 @@ describe("MenuItemReviewForm tests", () => {
                 <MenuItemReviewForm submitAction={mockSubmitAction} />
             </Router>
         );
-        await screen.findByTestId("MenuItemReviewForm-itemid");
+        await screen.findByTestId("MenuItemReviewForm-itemId");
 
-        const itemidField = screen.getByTestId("MenuItemReviewForm-itemid");
+        const itemidField = screen.getByTestId("MenuItemReviewForm-itemId");
         const emailField = screen.getByTestId("MenuItemReviewForm-email");
         const starsField = screen.getByTestId("MenuItemReviewForm-stars");
-        const localDateTimeField = screen.getByTestId("MenuItemReviewForm-localDateTime");
+        const localDateTimeField = screen.getByTestId("MenuItemReviewForm-timestamp");
         const commentsField = screen.getByTestId("MenuItemReviewForm-comments");
         const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
 

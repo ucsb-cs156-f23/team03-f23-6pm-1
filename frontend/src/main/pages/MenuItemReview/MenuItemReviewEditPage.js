@@ -29,16 +29,16 @@ export default function MenuItemReviewEditPage({storybook=false}) {
       id: menuItemReview.id
     },
     data: {
-      itemId: menuItemReview.itemid,
+      itemId: menuItemReview.itemId,
       email: menuItemReview.email,
       stars: menuItemReview.stars,
       comments: menuItemReview.comments,
-      timestamp: menuItemReview.localDateTime
+      timestamp: menuItemReview.timestamp
     }
   });
 
   const onSuccess = (menuItemReview) => {
-    toast(`MenuItemReview Updated - id: ${menuItemReview.id} email: ${menuItemReview.email}, posted at: ${menuItemReview.localDateTime}`);
+    toast(`MenuItemReview Updated - id: ${menuItemReview.id} email: ${menuItemReview.email}, posted at: ${menuItemReview.timestamp}`);
   }
 
   const mutation = useBackendMutation(

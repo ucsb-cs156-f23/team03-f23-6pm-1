@@ -76,18 +76,18 @@ describe("MenuItemReviewEditPage tests", () => {
             axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
             axiosMock.onGet("/api/menuitemreview", { params: { id: 1 } }).reply(200, {
                 id: 1,
-                itemid: 2,
+                itemId: 2,
                 email: "fake@gmail.com",
                 stars: 3,
-                localDateTime: "2022-02-02T00:00",
+                timestamp: "2022-02-02T00:00",
                 comments: "myComment"
             });
             axiosMock.onPut('/api/menuitemreview').reply(200, {
-                id: "1",
-                itemid: '3',
+                id: 1,
+                itemId: 3,
                 email: "faker@gmail.com",
-                stars: '4',
-                localDateTime: "2022-12-25T08:00",
+                stars: 4,
+                timestamp: "2022-12-25T08:00",
                 comments: "hisComment"
             });
         });
@@ -113,14 +113,14 @@ describe("MenuItemReviewEditPage tests", () => {
                 </QueryClientProvider>
             );
 
-            await screen.findByTestId("MenuItemReviewForm-itemid");
+            await screen.findByTestId("MenuItemReviewForm-itemId");
             
             
             const idField = screen.getByTestId("MenuItemReviewForm-id");
-            const itemidField = screen.getByTestId("MenuItemReviewForm-itemid");
+            const itemidField = screen.getByTestId("MenuItemReviewForm-itemId");
             const emailField = screen.getByTestId("MenuItemReviewForm-email");
             const starsField = screen.getByTestId("MenuItemReviewForm-stars");
-            const localDateTimeField = screen.getByTestId("MenuItemReviewForm-localDateTime");
+            const localDateTimeField = screen.getByTestId("MenuItemReviewForm-timestamp");
             const commentsField = screen.getByTestId("MenuItemReviewForm-comments");
             const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
 
@@ -144,14 +144,14 @@ describe("MenuItemReviewEditPage tests", () => {
             );
                 
             await waitFor(() => {
-                expect(screen.getByTestId("MenuItemReviewForm-itemid")).toBeInTheDocument();
+                expect(screen.getByTestId("MenuItemReviewForm-itemId")).toBeInTheDocument();
             });
 
             const idField = screen.getByTestId("MenuItemReviewForm-id");
-            const itemidField = screen.getByTestId("MenuItemReviewForm-itemid");
+            const itemidField = screen.getByTestId("MenuItemReviewForm-itemId");
             const emailField = screen.getByTestId("MenuItemReviewForm-email");
             const starsField = screen.getByTestId("MenuItemReviewForm-stars");
-            const localDateTimeField = screen.getByTestId("MenuItemReviewForm-localDateTime");
+            const localDateTimeField = screen.getByTestId("MenuItemReviewForm-timestamp");
             const commentsField = screen.getByTestId("MenuItemReviewForm-comments");
             const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
 

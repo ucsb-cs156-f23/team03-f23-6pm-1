@@ -72,13 +72,13 @@ describe("MenuItemReviewCreatePage tests", () => {
         );
 
         await waitFor(() => {
-            expect(screen.getByTestId("MenuItemReviewForm-itemid")).toBeInTheDocument();
+            expect(screen.getByTestId("MenuItemReviewForm-itemId")).toBeInTheDocument();
         });
 
-        const itemidField = screen.getByTestId("MenuItemReviewForm-itemid");
+        const itemidField = screen.getByTestId("MenuItemReviewForm-itemId");
         const emailField = screen.getByTestId("MenuItemReviewForm-email");
         const starsField = screen.getByTestId("MenuItemReviewForm-stars");
-        const localDateTimeField = screen.getByTestId("MenuItemReviewForm-localDateTime");
+        const localDateTimeField = screen.getByTestId("MenuItemReviewForm-timestamp");
         const commentsField = screen.getByTestId("MenuItemReviewForm-comments");
         const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
 
