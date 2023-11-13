@@ -90,8 +90,7 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
                         <Form.Control
                             data-testid="MenuItemReviewForm-localDateTime"
                             id="localDateTime"
-                            //type="datetime-local"
-                            type = "local date and time"
+                            type="datetime-local"
                             isInvalid={Boolean(errors.localDateTime)}
                             {...register("localDateTime", { required: true, pattern: isodate_regex })}
                         />
