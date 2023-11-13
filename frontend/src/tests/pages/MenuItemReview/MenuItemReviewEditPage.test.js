@@ -179,11 +179,11 @@ describe("MenuItemReviewEditPage tests", () => {
             expect(axiosMock.history.put.length).toBe(1); // times called
             expect(axiosMock.history.put[0].params).toEqual({ id: 1 });
             expect(axiosMock.history.put[0].data).toBe(JSON.stringify({
-                itemid: '3',
+                itemId: '3',
                 email: "faker@gmail.com",
                 stars: '4',
-                localDateTime: "2022-12-25T08:00",
-                comments: "hisComment"
+                comments: "hisComment",
+                timestamp: "2022-12-25T08:00"
             })); // posted object
 
         });

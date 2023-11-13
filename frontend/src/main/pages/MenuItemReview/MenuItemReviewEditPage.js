@@ -29,11 +29,11 @@ export default function MenuItemReviewEditPage({storybook=false}) {
       id: menuItemReview.id
     },
     data: {
-      itemid: menuItemReview.itemid,
+      itemId: menuItemReview.itemid,
       email: menuItemReview.email,
       stars: menuItemReview.stars,
-      localDateTime: menuItemReview.localDateTime,
-      comments: menuItemReview.comments
+      comments: menuItemReview.comments,
+      timestamp: menuItemReview.localDateTime
     }
   });
 
