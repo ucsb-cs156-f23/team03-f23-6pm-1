@@ -82,9 +82,9 @@ describe("MenuItemReviewCreatePage tests", () => {
         const commentsField = screen.getByTestId("MenuItemReviewForm-comments");
         const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
 
-        fireEvent.change(itemidField, { target: { value: 2 } });
+        fireEvent.change(itemidField, { target: { value: 3 } });
         fireEvent.change(emailField, { target: { value: "newEmail@fakemail.com" } });
-        fireEvent.change(starsField, { target: { value: 3 } });
+        fireEvent.change(starsField, { target: { value: 4 } });
         fireEvent.change(localDateTimeField, { target: { value: '2022-02-02T00:00' } });
         fireEvent.change(commentsField, { target: { value: "new comment" } });
 
@@ -96,9 +96,9 @@ describe("MenuItemReviewCreatePage tests", () => {
         
         expect(axiosMock.history.post[0].params).toEqual(
             {
-            "itemId": "2",
+            "itemId": "3",
             "email": "newEmail@fakemail.com",
-            "stars": "3",
+            "stars": "4",
             "timestamp": "2022-02-02T00:00",
             "comments": "new comment"
         });

@@ -58,7 +58,7 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
 
                 <Col>
                     <Form.Group className="mb-3" >
-                        <Form.Label htmlFor="email">email</Form.Label>
+                        <Form.Label htmlFor="email">Email</Form.Label>
                         <Form.Control
                             data-testid="MenuItemReviewForm-email"
                             id="email"

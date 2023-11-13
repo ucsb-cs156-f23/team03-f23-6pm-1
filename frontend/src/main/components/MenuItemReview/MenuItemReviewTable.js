@@ -37,7 +37,7 @@ export default function MenuItemReviewTable({ dates, currentUser }) {
             accessor: 'itemId', // accessor is the "key" in the data
         },
         {
-            Header: 'reviewerEmail',
+            Header: 'Email',
             accessor: 'email',
         },
         {
@@ -49,7 +49,7 @@ export default function MenuItemReviewTable({ dates, currentUser }) {
             accessor: 'comments',
         },
         {
-            Header: 'dateReviewed',
+            Header: 'Date Reviewed',
             accessor: 'timestamp',
         }
     ];
