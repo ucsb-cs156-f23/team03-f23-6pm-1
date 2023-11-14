@@ -27,11 +27,7 @@ function UCSBOrganizationForm({ initialContents, submitAction, buttonLabel = "Cr
                     id="orgCode"
                     type="text"
                     {...register("orgCode", {
-                        required: "orgCode is required",
-                        maxLength : {
-                            value: 30,
-                            message: "Max length 30 characters"
-                        }
+                        required: "orgCode is required"
                     })}
                 />
                 <Form.Control.Feedback type="invalid">
