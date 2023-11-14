@@ -10,7 +10,6 @@ import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 
 import { menuItemReviewFixtures } from "fixtures/menuItemReviewFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
-import { ucsbDatesFixtures } from "fixtures/ucsbDatesFixtures";
 import MenuItemReviewIndexPage from "main/pages/MenuItemReview/MenuItemReviewIndexPage";
 
 const mockToast = jest.fn();
@@ -122,7 +121,7 @@ describe("MenuItemReviewIndexPage tests", () => {
     test("what happens when you click delete, admin", async () => {
         setupAdminUser();
 
-        axiosMock.onGet("/api/menuitemreview/all").reply(200, ucsbDatesFixtures.threeReviews);
+        axiosMock.onGet("/api/menuitemreview/all").reply(200, menuItemReviewFixtures.threeReviews);
         axiosMock.onDelete("/api/menuitemreview").reply(200, "Review with id 1 was deleted");
 
 

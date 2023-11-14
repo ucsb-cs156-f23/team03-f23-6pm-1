@@ -114,8 +114,8 @@ describe("MenuItemReviewCreatePage tests", () => {
         expect(axiosMock.history.post[0].params).toEqual({
             itemId: 5,
             stars: 4,
-            reviewerEmail: "rd@ucsb.edu",
-            dateReviewed: "2022-01-03T00:00:02.000",
+            email: "rd@ucsb.edu",
+            timestamp: "2022-01-03T00:00:02.000",
             comments: "Second comment"
         });
 

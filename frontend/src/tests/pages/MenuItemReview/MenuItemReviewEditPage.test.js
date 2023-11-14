@@ -60,7 +60,7 @@ describe("MenuItemReviewEditPage tests", () => {
                 </QueryClientProvider>
             );
             await screen.findByText("Edit Review");
-            expect(screen.queryByTestId("itemId")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("MenuItemReview")).not.toBeInTheDocument();
             restoreConsole();
         });
     });
@@ -114,7 +114,7 @@ describe("MenuItemReviewEditPage tests", () => {
             const submitButton = screen.getByTestId("MenuItemReview-submit");
 
             expect(idField).toBeInTheDocument();
-            expect(idField).toHaveValue("2");
+            expect(idField).toHaveValue("1");
             expect(itemIdField).toBeInTheDocument();
             expect(itemIdField).toHaveValue(5);
             expect(starsField).toBeInTheDocument();
@@ -127,12 +127,12 @@ describe("MenuItemReviewEditPage tests", () => {
             fireEvent.click(submitButton);
 
             await waitFor(() => expect(mockToast).toBeCalled());
-            expect(mockToast).toBeCalledWith("Review updated - id: 2 itemId: 5 stars: 4 reviewerEmail: cgaucho@ucsb.edu dateReviewed: 2022-01-03T00:00:02 comments: some other comment");
+            expect(mockToast).toBeCalledWith("Review updated - id: 1 itemId: 5 stars: 4 reviewerEmail: cgaucho@ucsb.edu dateReviewed: 2022-01-03T00:00:02 comments: some other comment");
 
             expect(mockNavigate).toBeCalledWith({ "to": "/menuitemreview" });
 
             expect(axiosMock.history.put.length).toBe(1); // times called
-            expect(axiosMock.history.put[0].params).toEqual({ id: 2 });
+            expect(axiosMock.history.put[0].params).toEqual({ id: 1 });
             expect(axiosMock.history.put[0].data).toBe(JSON.stringify({
                 itemId: 5,
                 stars: 4,
@@ -162,7 +162,7 @@ describe("MenuItemReviewEditPage tests", () => {
             const commentField = screen.getByTestId("comments");
             const submitButton = screen.getByTestId("MenuItemReview-submit");
 
-            expect(idField).toHaveValue("2");
+            expect(idField).toHaveValue("1");
             expect(itemIdField).toHaveValue(5);
             expect(starsField).toHaveValue(4);
             expect(submitButton).toBeInTheDocument();

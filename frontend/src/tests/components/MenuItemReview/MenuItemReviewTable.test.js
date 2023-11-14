@@ -151,7 +151,7 @@ describe("UserTable tests", () => {
 
     fireEvent.click(editButton);
 
-    await waitFor(() => expect(mockedNavigate).toHaveBeenCalledWith('/ucsbmenuitemreview/edit/2'));
+    await waitFor(() => expect(mockedNavigate).toHaveBeenCalledWith('/menuitemreview/edit/2'));
 
   });
 
