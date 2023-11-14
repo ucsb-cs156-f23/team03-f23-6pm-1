@@ -35,7 +35,7 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
                         <Form.Group className="mb-3" >
                             <Form.Label htmlFor="id">Id</Form.Label>
                             <Form.Control
-                                data-testid="MenuItemReviewForm-id"
+                                data-testid="MenuItemReview-id"
                                 id="id"
                                 type="text"
                                 {...register("id")}
@@ -49,7 +49,7 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
                     <Form.Group className="mb-3" >
                         <Form.Label htmlFor="itemId">itemId</Form.Label>
                         <Form.Control
-                            data-testid="MenuItemReviewForm-itemId"
+                            data-testid="itemId"
                             id="itemId"
                             type="number"
                             isInvalid={Boolean(errors.itemId)}
@@ -65,7 +65,7 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
                     <Form.Group className="mb-3" >
                         <Form.Label htmlFor="stars">Stars</Form.Label>
                         <Form.Control
-                            data-testid="MenuItemReviewForm-stars"
+                            data-testid="stars"
                             id="stars"
                             type="number"
                             isInvalid={Boolean(errors.stars)}
@@ -85,17 +85,16 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
             <Row>
                 <Col>
                     <Form.Group className="mb-3" >
-                        <Form.Label htmlFor="email">Reviewer Email</Form.Label>
+                        <Form.Label htmlFor="reviewerEmail">Reviewer Email</Form.Label>
                         <Form.Control
-                            data-testid="MenuItemReviewForm-email"
-                            id="email"
+                            data-testid="reviewerEmail"
+                            id="reviewerEmail"
                             type="text"
-                            isInvalid={errors.email}
-                            {...register("email", { required: "Reviewer Email is required", pattern: emailRegex })}
-                            {...register("email")}
+                            isInvalid={errors.reviewerEmail}
+                            {...register("reviewerEmail", { required: "Reviewer Email is required", pattern: emailRegex })}
                         />
                         <Form.Control.Feedback type="invalid">
-                            {errors.email?.message}
+                            {errors.reviewerEmail?.message}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
@@ -103,16 +102,16 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
             <Row>
                 <Col>
                     <Form.Group className="mb-3" >
-                        <Form.Label htmlFor="timestamp">Date Reviewed</Form.Label>
+                        <Form.Label htmlFor="dateReviewed">Date Reviewed</Form.Label>
                         <Form.Control
-                            data-testid="MenuItemReviewForm-timestamp"
-                            id="timestamp"
+                            data-testid="dateReviewed"
+                            id="dateReviewed"
                             type="datetime-local"
-                            isInvalid={Boolean(errors.timestamp)}
-                            {...register("timestamp", { required: true, pattern: isodate_regex })}
+                            isInvalid={Boolean(errors.dateReviewed)}
+                            {...register("dateReviewed", { required: true, pattern: isodate_regex })}
                         />
                         <Form.Control.Feedback type="invalid">
-                            {errors.timestamp && 'Date reviewed is required. '}
+                            {errors.dateReviewed && 'Date reviewed is required. '}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
@@ -121,7 +120,7 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
                 <Form.Group className="mb-3" >
                     <Form.Label htmlFor="comments">Comments</Form.Label>
                     <Form.Control
-                        data-testid="MenuItemReviewForm-comments"
+                        data-testid="comments"
                         id="comments"
                         type="text"
                         isInvalid={Boolean(errors.comments)}
@@ -138,14 +137,14 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
                 <Col>
                     <Button
                         type="submit"
-                        data-testid="MenuItemReviewForm-submit"
+                        data-testid="MenuItemReview-submit"
                     >
                         {buttonLabel}
                     </Button>
                     <Button
                         variant="Secondary"
                         onClick={() => navigate(-1)}
-                        data-testid="MenuItemReviewForm-cancel"
+                        data-testid="MenuItemReview-cancel"
                     >
                         Cancel
                     </Button>

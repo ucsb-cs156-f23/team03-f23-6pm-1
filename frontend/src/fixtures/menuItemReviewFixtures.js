@@ -1,39 +1,45 @@
 const menuItemReviewFixtures = {
-    oneDate: {
-        "id": 1,
-        "itemId" : 10,
-        "email": "fakeReviewer@ucsb.edu",
+    oneReview:
+    [
+      {
+       "id": 1,
+        "itemId": 4,
         "stars": 3,
-        "timestamp": "2022-01-02T12:00:00",
-        "comments": "Great food"
-    },
-    threeDates: [
-        {
-            "id": 1,
-            "itemid" : 10,
-            "email": "fakeRev1ewer@ucsb.edu",
-            "stars": 3,
-            "timestamp": "2022-01-02T12:00:00",
-            "comments": "Ok food"
-        },
+        "reviewerEmail": "cgaucho@ucsb.edu",
+        "dateReviewed": "2022-01-03T00:00:00",
+        "comments": "Some comment"
+      }
+    ],
+
+    threeReviews:
+    [
         {
             "id": 2,
-            "itemid" : 10,
-            "email": "fakeRev2ewer@ucsb.edu",
-            "stars": 3,
-            "timestamp": "2021-01-02T12:00:00",
-            "comments": "Bad food"
+            "itemId": 5,
+            "stars": 4,
+            "reviewerEmail": "rd@ucsb.edu",
+            "dateReviewed": "2022-01-03T00:00:02",
+            "comments": "Second comment"
         },
+
         {
             "id": 3,
-            "itemid" : 11,
-            "email": "fakeRev3ewer@ucsb.edu",
+            "itemId": 5,
+            "stars": 3,
+            "reviewerEmail": "someemail@ucsb.edu",
+            "dateReviewed": "2022-01-03T00:00:5",
+            "comments": "Third comment"
+        },
+
+        {
+            "id": 4,
+            "itemId": 6,
             "stars": 2,
-            "timestamp": "2023-01-02T12:00:00",
-            "comments": "Great food"
-        }
+            "reviewerEmail": "something@ucsb.edu",
+            "dateReviewed": "2022-01-03T00:03:02",
+            "comments": "Fourth comment"
+        },
     ]
 };
-
 
 export { menuItemReviewFixtures };

@@ -1,12 +1,14 @@
-import { render, waitFor, fireEvent, screen } from "@testing-library/react";
-import MenuItemReviewCreatePage from "main/pages/MenuItemReview/MenuItemReviewCreatePage";
+
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
 
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
+
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
+import MenuItemReviewCreatePage from "main/pages/MenuItemReview/MenuItemReviewCreatePage";
 
 const mockToast = jest.fn();
 jest.mock('react-toastify', () => {
@@ -30,17 +32,19 @@ jest.mock('react-router-dom', () => {
 
 describe("MenuItemReviewCreatePage tests", () => {
 
-    const axiosMock =new AxiosMockAdapter(axios);
+    const axiosMock = new AxiosMockAdapter(axios);
+
 
     beforeEach(() => {
+        jest.clearAllMocks();
         axiosMock.reset();
         axiosMock.resetHistory();
         axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
         axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
     });
 
+    const queryClient = new QueryClient();
     test("renders without crashing", () => {
-        const queryClient = new QueryClient();
         render(
             <QueryClientProvider client={queryClient}>
                 <MemoryRouter>
@@ -50,18 +54,19 @@ describe("MenuItemReviewCreatePage tests", () => {
         );
     });
 
-    test("when you fill in the form and hit submit, it makes a request to the backend", async () => {
+    test("on submit, makes request to backend, and redirects to /restaurants", async () => {
 
         const queryClient = new QueryClient();
-        const menuItemReview = {
-            itemId: 2,
-            email: "fake@gmail.com",
-            stars: 3,
-            timestamp: "2022-02-02T00:00",
-            comments: "myComment"
+        const review = {
+            id: 2,
+            itemId: 5,
+            stars: 4,
+            reviewerEmail: "rd@ucsb.edu",
+            dateReviewed: "2022-01-03T00:00:02",
+            comments: "Second comment"
         };
 
-        axiosMock.onPost("/api/menuitemreview/post").reply( 202, menuItemReview );
+        axiosMock.onPost("/api/menuitemreview/post").reply(202, review);
 
         render(
             <QueryClientProvider client={queryClient}>
@@ -69,45 +74,55 @@ describe("MenuItemReviewCreatePage tests", () => {
                     <MenuItemReviewCreatePage />
                 </MemoryRouter>
             </QueryClientProvider>
-        );
+        )
 
         await waitFor(() => {
-            expect(screen.getByTestId("MenuItemReviewForm-itemId")).toBeInTheDocument();
+            expect(screen.getByLabelText("Stars")).toBeInTheDocument();
         });
 
-        const itemidField = screen.getByTestId("MenuItemReviewForm-itemId");
-        const emailField = screen.getByTestId("MenuItemReviewForm-email");
-        const starsField = screen.getByTestId("MenuItemReviewForm-stars");
-        const localDateTimeField = screen.getByTestId("MenuItemReviewForm-timestamp");
-        const commentsField = screen.getByTestId("MenuItemReviewForm-comments");
-        const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
+        const itemIdInput = screen.getByLabelText("itemId");
+        expect(itemIdInput).toBeInTheDocument();
 
-        fireEvent.change(itemidField, { target: { value: 3 } });
-        fireEvent.change(emailField, { target: { value: "newEmail@fakemail.com" } });
-        fireEvent.change(starsField, { target: { value: 4 } });
-        fireEvent.change(localDateTimeField, { target: { value: '2022-02-02T00:00' } });
-        fireEvent.change(commentsField, { target: { value: "new comment" } });
+        const starsInput = screen.getByLabelText("Stars");
+        expect(starsInput).toBeInTheDocument();
 
-        expect(submitButton).toBeInTheDocument();
+        const reviewerEmailInput = screen.getByLabelText("Reviewer Email");
+        expect(reviewerEmailInput).toBeInTheDocument();
 
-        fireEvent.click(submitButton);
+        const dateInput = screen.getByLabelText("Date Reviewed");
+        expect(dateInput).toBeInTheDocument();
+
+        const commentsInput = screen.getByLabelText("Comments");
+        expect(commentsInput).toBeInTheDocument();
+
+
+        const createButton = screen.getByText("Create");
+        expect(createButton).toBeInTheDocument();
+
+        fireEvent.change(itemIdInput, { target: { value: 5 } })
+        fireEvent.change(starsInput, { target: { value: 4 } })
+        fireEvent.change(reviewerEmailInput, { target: { value: "rd@ucsb.edu" } })
+        fireEvent.change(dateInput, { target: { value: "2022-01-03T00:00:02" } })
+        fireEvent.change(commentsInput, { target: { value: "Second comment" } })
+        
+
+
+        fireEvent.click(createButton);
 
         await waitFor(() => expect(axiosMock.history.post.length).toBe(1));
-        
-        expect(axiosMock.history.post[0].params).toEqual(
-            {
-            "itemId": 3,
-            "email": "newEmail@fakemail.com",
-            "stars": 4,
-            "timestamp": "2022-02-02T00:00",
-            "comments": "new comment"
+
+        expect(axiosMock.history.post[0].params).toEqual({
+            itemId: 5,
+            stars: 4,
+            reviewerEmail: "rd@ucsb.edu",
+            dateReviewed: "2022-01-03T00:00:02.000",
+            comments: "Second comment"
         });
 
-        expect(mockToast).toBeCalledWith("New menuItemReview Created - email: fake@gmail.com, posted at: 2022-02-02T00:00");
+        // assert - check that the toast was called with the expected message
+        expect(mockToast).toBeCalledWith("New review Created - id: 2 itemId: 5 stars: 4 reviewerEmail: rd@ucsb.edu dateReviewed: 2022-01-03T00:00:02 comments: Second comment");
         expect(mockNavigate).toBeCalledWith({ "to": "/menuitemreview" });
+
     });
 
-
 });
-
-

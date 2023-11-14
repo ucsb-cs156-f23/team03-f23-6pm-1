@@ -1,72 +1,44 @@
+import { useBackend } from 'main/utils/useBackend';
+
+import MenuItemReviewTable from 'main/components/MenuItemReview/MenuItemReviewTable';
 import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
-import { useParams } from "react-router-dom";
-import MenuItemReviewForm from "main/components/MenuItemReview/MenuItemReviewForm";
-import { Navigate } from 'react-router-dom'
-import { useBackend, useBackendMutation } from "main/utils/useBackend";
-import { toast } from "react-toastify";
+import { hasRole, useCurrentUser } from 'main/utils/currentUser';
+import { Button } from 'react-bootstrap';
 
-export default function MenuItemReviewEditPage({storybook=false}) {
-  let { id } = useParams();
+export default function MenuItemReviewIndexPage() {
 
-  const { data: menuItemReview, _error, _status } =
-    useBackend(
-      // Stryker disable next-line all : don't test internal caching of React Query
-      [`/api/menuitemreview?id=${id}`],
-      {  // Stryker disable next-line all : GET is the default, so changing this to "" doesn't introduce a bug
-        method: "GET",
-        url: `/api/menuitemreview`,
-        params: {
-          id
-        }
-      }
-    );
+    const currentUser = useCurrentUser();
 
+    const { data: reviews, error: _error, status: _status } =
+        useBackend(
+            // Stryker disable next-line all : don't test internal caching of React Query
+            ["/api/menuitemreview/all"],
+            { method: "GET", url: "/api/menuitemreview/all" },
+            // Stryker disable next-line all : don't test default value of empty list
+            []
+        );
 
-  const objectToAxiosPutParams = (menuItemReview) => ({
-    url: "/api/menuitemreview",
-    method: "PUT",
-    params: {
-      id: menuItemReview.id
-    },
-    data: {
-      itemId: menuItemReview.itemId,
-      email: menuItemReview.email,
-      stars: menuItemReview.stars,
-      comments: menuItemReview.comments,
-      timestamp: menuItemReview.timestamp
+    const createButton = () => {
+        if (hasRole(currentUser, "ROLE_ADMIN")) {
+            return (
+                <Button
+                    variant="primary"
+                    href="/menuitemreview/create"
+                    style={{ float: "right" }}
+                >
+                    Create Review
+                </Button>
+            )
+        } 
     }
-  });
 
-  const onSuccess = (menuItemReview) => {
-    toast(`MenuItemReview Updated - id: ${menuItemReview.id} email: ${menuItemReview.email}, posted at: ${menuItemReview.timestamp}`);
-  }
-
-  const mutation = useBackendMutation(
-    objectToAxiosPutParams,
-    { onSuccess },
-    // Stryker disable next-line all : hard to set up test for caching
-    [`/api/menuitemreview?id=${id}`]
-  );
-
-  const { isSuccess } = mutation
-
-  const onSubmit = async (data) => {
-    mutation.mutate(data);
-  }
-
-  if (isSuccess && !storybook) {
-    return <Navigate to="/menuitemreview" />
-  }
-
-  return (
-    <BasicLayout>
-      <div className="pt-2">
-        <h1>Edit MenuItemReview</h1>
-        {
-          menuItemReview && <MenuItemReviewForm initialContents={menuItemReview} submitAction={onSubmit} buttonLabel="Update" />
-        }
-      </div>
-    </BasicLayout>
-  )
+    return (
+        <BasicLayout>
+            <div className="pt-2">
+                {createButton()}
+                <h1>Reviews</h1>
+                <MenuItemReviewTable reviews={reviews} currentUser={currentUser} />
+            </div>
+        </BasicLayout>
+    );
 }
-

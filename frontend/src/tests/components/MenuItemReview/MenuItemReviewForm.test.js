@@ -17,7 +17,7 @@ describe("MenuItemReviewForm tests", () => {
     const queryClient = new QueryClient();
 
     const expectedHeaders = ["itemId", "Stars", "Reviewer Email", "Date Reviewed", "Comments"];
-    const testId = "MenuItemReviewForm";
+    const testId = "MenuItemReview";
 
     test("renders correctly with no initialContents", async () => {
         render(
@@ -41,7 +41,7 @@ describe("MenuItemReviewForm tests", () => {
         render(
             <QueryClientProvider client={queryClient}>
                 <Router>
-                    <MenuItemReviewForm initialContents={menuItemReviewFixtures.oneDate} />
+                    <MenuItemReviewForm initialContents={menuItemReviewFixtures.oneReview[0]} />
                 </Router>
             </QueryClientProvider>
         );
@@ -52,7 +52,7 @@ describe("MenuItemReviewForm tests", () => {
             const header = screen.getByText(headerText);
             expect(header).toBeInTheDocument();
         });
-        
+
         expect(await screen.findByTestId(`${testId}-id`)).toBeInTheDocument();
         expect(screen.getByText(`Id`)).toBeInTheDocument();
     });

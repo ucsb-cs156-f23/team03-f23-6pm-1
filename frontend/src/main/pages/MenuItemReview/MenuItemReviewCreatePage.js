@@ -1,33 +1,34 @@
-import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
+
 import MenuItemReviewForm from "main/components/MenuItemReview/MenuItemReviewForm";
-import { Navigate } from 'react-router-dom'
+import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 import { useBackendMutation } from "main/utils/useBackend";
+import { Navigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 
-export default function MenuItemReviewCreatePage({storybook=false}) {
+export default function MenuItemReviewCreatePage({ storybook = false }) {
 
-  const objectToAxiosParams = (menuItemReview) => ({
+  const objectToAxiosParams = (review) => ({
     url: "/api/menuitemreview/post",
     method: "POST",
     params: {
-      itemId: menuItemReview.itemId,
-      email: menuItemReview.email,
-      stars: menuItemReview.stars,
-      comments: menuItemReview.comments,
-      timestamp: menuItemReview.timestamp
+      itemId: review.itemId,
+      stars: review.stars,
+      email: review.reviewerEmail,
+      timestamp: review.dateReviewed,
+      comments: review.comments
     }
   });
 
-  const onSuccess = (menuItemReview) => {
-    toast(`New menuItemReview Created - email: ${menuItemReview.email}, posted at: ${menuItemReview.timestamp}`);
+  const onSuccess = (review) => {
+    toast(`New review Created - id: ${review.id} itemId: ${review.itemId} stars: ${review.stars} reviewerEmail: ${review.reviewerEmail} dateReviewed: ${review.dateReviewed} comments: ${review.comments}`);
   }
 
   const mutation = useBackendMutation(
     objectToAxiosParams,
-     { onSuccess }, 
-     // Stryker disable next-line all : hard to set up test for caching
-     ["/api/menuitemreview/all"]
-     );
+    { onSuccess },
+    // Stryker disable next-line all : hard to set up test for caching
+    ["/api/menuitemreview/all"] // mutation makes this key stale so that pages relying on it reload
+  );
 
   const { isSuccess } = mutation
 
@@ -42,10 +43,8 @@ export default function MenuItemReviewCreatePage({storybook=false}) {
   return (
     <BasicLayout>
       <div className="pt-2">
-        <h1>Create New MenuItemReview</h1>
-
+        <h1>Create New Review</h1>
         <MenuItemReviewForm submitAction={onSubmit} />
-
       </div>
     </BasicLayout>
   )
