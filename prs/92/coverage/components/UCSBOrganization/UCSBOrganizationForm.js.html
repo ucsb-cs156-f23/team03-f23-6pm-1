@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -171,7 +171,13 @@
 <a name='L106'></a><a href='#L106'>106</a>
 <a name='L107'></a><a href='#L107'>107</a>
 <a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -181,16 +187,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -300,26 +312,35 @@ function UCSBOrganizationForm({ initialContents, submitAction, buttonLabel = "Cr
 &nbsp;
     return (
         &lt;Form onSubmit={handleSubmit(submitAction)}&gt;
-            
-            &lt;Form.Group className="mb-3" &gt;
-                &lt;Form.Label htmlFor="orgCode"&gt;orgCode&lt;/Form.Label&gt;
-                &lt;Form.Control
-                    data-testid={testIdPrefix + "-orgCode"}
-                    id="orgCode"
-                    type="text"
-                    {...register("orgCode", {
-                        required: "orgCode is required",
-                        maxLength : {
-                            value: 30,
-                            message: "Max length 30 characters"
-                        }
-                    })}
-                /&gt;
-                &lt;Form.Control.Feedback type="invalid"&gt;
-                    {errors.orgCode?.message}
-                &lt;/Form.Control.Feedback&gt;
-            &lt;/Form.Group&gt;
-            
+&nbsp;
+            {initialContents ? (
+                &lt;Form.Group className="mb-3" &gt;
+                    &lt;Form.Label htmlFor="orgCode"&gt;orgCode&lt;/Form.Label&gt;
+                    &lt;Form.Control
+                        data-testid={testIdPrefix + "-orgCode"}
+                        id="orgCode"
+                        type="text"
+                        {...register("orgCode")}
+                        value={initialContents.orgCode}
+                        disabled
+                    /&gt;
+                &lt;/Form.Group&gt;
+            ) : (
+                &lt;Form.Group className="mb-3" &gt;
+                    &lt;Form.Label htmlFor="orgCode"&gt;orgCode&lt;/Form.Label&gt;
+                    &lt;Form.Control
+                        data-testid={testIdPrefix + "-orgCode"}
+                        id="orgCode"
+                        type="text"
+                        {...register("orgCode", {
+                            required: "orgCode is required"
+                        })}
+                    /&gt;
+                    &lt;Form.Control.Feedback type="invalid"&gt;
+                        {errors.orgCode?.message}
+                    &lt;/Form.Control.Feedback&gt;
+                &lt;/Form.Group&gt;
+            )}
 &nbsp;
             &lt;Form.Group className="mb-3" &gt;
                 &lt;Form.Label htmlFor="orgTranslationShort"&gt;orgTranslationShort&lt;/Form.Label&gt;
@@ -345,7 +366,7 @@ function UCSBOrganizationForm({ initialContents, submitAction, buttonLabel = "Cr
                     type="text"
                     isInvalid={Boolean(errors.orgTranslation)}
                     {...register("orgTranslation", {
-                        required: "orgTranslation is required."
+                        required: "orgTranslation is required"
                     })}
                 /&gt;
                 &lt;Form.Control.Feedback type="invalid"&gt;
@@ -354,19 +375,16 @@ function UCSBOrganizationForm({ initialContents, submitAction, buttonLabel = "Cr
             &lt;/Form.Group&gt;
 &nbsp;
             &lt;Form.Group className="mb-3" &gt;
-                &lt;Form.Label htmlFor="inactive"&gt;Inactive&lt;/Form.Label&gt;
-                &lt;Form.Control
-                    data-testid={testIdPrefix + "-inactive"}
-                    id="inactive"
-                    type="boolean"
-                    isInvalid={Boolean(errors.inactive)}
-                    {...register("inactive", {
-                        required: "inactive is required."
-                    })}
-                /&gt;
-                &lt;Form.Control.Feedback type="invalid"&gt;
-                    {errors.inactive?.message}
-                &lt;/Form.Control.Feedback&gt;
+            &lt;Form.Check // prettier-ignore
+                            type="switch"
+                            data-testid="UCSBOrganizationForm-inactive"
+                            id="inactive"
+                            label="Inactive?"
+                            {...register("inactive", {})}
+                        /&gt;
+                        &lt;Form.Control.Feedback type="invalid"&gt;
+                            {errors.done?.message}
+                        &lt;/Form.Control.Feedback&gt;
             &lt;/Form.Group&gt;
 &nbsp;
             &lt;Button
@@ -394,7 +412,7 @@ export default UCSBOrganizationForm;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Mon Nov 13 2023 22:19:31 GMT-0800 (Pacific Standard Time)
+                at Mon Nov 13 2023 23:31:22 GMT-0800 (Pacific Standard Time)
             </div>
         <script src="../../prettify.js"></script>
         <script>
