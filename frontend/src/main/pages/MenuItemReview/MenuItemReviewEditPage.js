@@ -1,72 +1,71 @@
-import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
-import { useParams } from "react-router-dom";
+
 import MenuItemReviewForm from "main/components/MenuItemReview/MenuItemReviewForm";
-import { Navigate } from 'react-router-dom'
+import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 import { useBackend, useBackendMutation } from "main/utils/useBackend";
+import { Navigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function MenuItemReviewEditPage({storybook=false}) {
-  let { id } = useParams();
+    let { id } = useParams();
 
-  const { data: menuItemReview, _error, _status } =
-    useBackend(
-      // Stryker disable next-line all : don't test internal caching of React Query
-      [`/api/menuitemreview?id=${id}`],
-      {  // Stryker disable next-line all : GET is the default, so changing this to "" doesn't introduce a bug
-        method: "GET",
-        url: `/api/menuitemreview`,
+    const { data: review, _error, _status } =
+        useBackend(
+            // Stryker disable next-line all : don't test internal caching of React Query
+            [`/api/menuitemreview?id=${id}`],
+            {  // Stryker disable next-line all : GET is the default, so mutating this to "" doesn't introduce a bug
+                method: "GET",
+                url: `/api/menuitemreview`,
+                params: {
+                    id
+                }
+            }
+        );
+
+    const objectToAxiosPutParams = (review) => ({
+        url: "/api/menuitemreview",
+        method: "PUT",
         params: {
-          id
+            id: review.id,
+        },
+        data: {
+            itemId: review.itemId,
+            stars: review.stars,
+            reviewerEmail: review.reviewerEmail,
+            dateReviewed: review.dateReviewed,
+            comments: review.comments
         }
-      }
+    });
+
+    const onSuccess = (review) => {
+        toast(`Review updated - id: ${review.id} itemId: ${review.itemId} stars: ${review.stars} reviewerEmail: ${review.reviewerEmail} dateReviewed: ${review.dateReviewed} comments: ${review.comments}`);
+    }
+
+    const mutation = useBackendMutation(
+        objectToAxiosPutParams,
+        { onSuccess },
+        // Stryker disable next-line all : hard to set up test for caching
+        [`/api/menuitemreview?id=${id}`]
     );
 
+    const { isSuccess } = mutation
 
-  const objectToAxiosPutParams = (menuItemReview) => ({
-    url: "/api/menuitemreview",
-    method: "PUT",
-    params: {
-      id: menuItemReview.id
-    },
-    data: {
-      itemid: menuItemReview.itemid,
-      email: menuItemReview.email,
-      stars: menuItemReview.stars,
-      localDateTime: menuItemReview.localDateTime,
-      comments: menuItemReview.comments
+    const onSubmit = async (data) => {
+        mutation.mutate(data);
     }
-  });
 
-  const onSuccess = (menuItemReview) => {
-    toast(`MenuItemReview Updated - id: ${menuItemReview.id} email: ${menuItemReview.email}, posted at: ${menuItemReview.localDateTime}`);
-  }
+    if (isSuccess && !storybook) {
+        return <Navigate to="/menuitemreview" />
+    }
 
-  const mutation = useBackendMutation(
-    objectToAxiosPutParams,
-    { onSuccess },
-    // Stryker disable next-line all : hard to set up test for caching
-    [`/api/menuitemreview?id=${id}`]
-  );
+    return (
+        <BasicLayout>
+            <div className="pt-2">
+                <h1>Edit Review</h1>
+                {
+                    review && <MenuItemReviewForm submitAction={onSubmit} buttonLabel={"Update"} initialContents={review} />
+                }
+            </div>
+        </BasicLayout>
+    )
 
-  const { isSuccess } = mutation
-
-  const onSubmit = async (data) => {
-    mutation.mutate(data);
-  }
-
-  if (isSuccess && !storybook) {
-    return <Navigate to="/menuitemreview" />
-  }
-
-  return (
-    <BasicLayout>
-      <div className="pt-2">
-        <h1>Edit MenuItemReview</h1>
-        {
-          menuItemReview && <MenuItemReviewForm initialContents={menuItemReview} submitAction={onSubmit} buttonLabel="Update" />
-        }
-      </div>
-    </BasicLayout>
-  )
 }
-

@@ -1,44 +1,45 @@
-import React from 'react'
+
 import { useBackend } from 'main/utils/useBackend';
 
-import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 import MenuItemReviewTable from 'main/components/MenuItemReview/MenuItemReviewTable';
+import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
+import { hasRole, useCurrentUser } from 'main/utils/currentUser';
 import { Button } from 'react-bootstrap';
-import { useCurrentUser , hasRole} from 'main/utils/currentUser';
 
 export default function MenuItemReviewIndexPage() {
 
-  const currentUser = useCurrentUser();
+    const currentUser = useCurrentUser();
 
-  const createButton = () => {
-    if (hasRole(currentUser, "ROLE_ADMIN")) {
-        return (
-            <Button
-                variant="primary"
-                href="/menuitemreview/create"
-                style={{ float: "right" }}
-            >
-                Create MenuItemReview 
-            </Button>
-        )
-    } 
-  }
-  
-  const { data: dates, error: _error, status: _status } =
-    useBackend(
-      // Stryker disable next-line all : don't test internal caching of React Query
-      ["/api/menuitemreview/all"],
-      { method: "GET", url: "/api/menuitemreview/all" },
-      []
+    const { data: reviews, error: _error, status: _status } =
+        useBackend(
+            // Stryker disable next-line all : don't test internal caching of React Query
+            ["/api/menuitemreview/all"],
+            { method: "GET", url: "/api/menuitemreview/all" },
+            // Stryker disable next-line all : don't test default value of empty list
+            []
+        );
+
+    const createButton = () => {
+        if (hasRole(currentUser, "ROLE_ADMIN")) {
+            return (
+                <Button
+                    variant="primary"
+                    href="/menuitemreview/create"
+                    style={{ float: "right" }}
+                >
+                    Create Review
+                </Button>
+            )
+        } 
+    }
+
+    return (
+        <BasicLayout>
+            <div className="pt-2">
+                {createButton()}
+                <h1>Reviews</h1>
+                <MenuItemReviewTable reviews={reviews} currentUser={currentUser} />
+            </div>
+        </BasicLayout>
     );
-
-  return (
-    <BasicLayout>
-      <div className="pt-2">
-        {createButton()}
-        <h1>MenuItemReview</h1>
-        <MenuItemReviewTable dates={dates} currentUser={currentUser} />
-      </div>
-    </BasicLayout>
-  )
 }

@@ -1,14 +1,14 @@
+
 import { fireEvent, render, waitFor, screen } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
-import MenuItemReviewEditPage from "main/pages/MenuItemReview/MenuItemReviewEditPage";
 
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
-
 import mockConsole from "jest-mock-console";
+import MenuItemReviewEditPage from "main/pages/MenuItemReview/MenuItemReviewEditPage";
 
 const mockToast = jest.fn();
 jest.mock('react-toastify', () => {
@@ -59,12 +59,12 @@ describe("MenuItemReviewEditPage tests", () => {
                     </MemoryRouter>
                 </QueryClientProvider>
             );
-            await screen.findByText("Edit MenuItemReview");
-            expect(screen.queryByTestId("MenuItemReviewForm-id")).not.toBeInTheDocument();
+            await screen.findByText("Edit Review");
+            expect(screen.queryByTestId("MenuItemReview")).not.toBeInTheDocument();
             restoreConsole();
         });
     });
-    
+
     describe("tests where backend is working normally", () => {
 
         const axiosMock = new AxiosMockAdapter(axios);
@@ -76,33 +76,24 @@ describe("MenuItemReviewEditPage tests", () => {
             axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
             axiosMock.onGet("/api/menuitemreview", { params: { id: 1 } }).reply(200, {
                 id: 1,
-                itemid: 2,
-                email: "fake@gmail.com",
-                stars: 3,
-                localDateTime: "2022-02-02T00:00",
-                comments: "myComment"
+                itemId: 5,
+                stars: 4,
+                reviewerEmail: "rd@ucsb.edu",
+                dateReviewed: "2022-01-03T00:00:02",
+                comments: "Second comment"
             });
             axiosMock.onPut('/api/menuitemreview').reply(200, {
-                id: "1",
-                itemid: '3',
-                email: "faker@gmail.com",
-                stars: '4',
-                localDateTime: "2022-12-25T08:00",
-                comments: "hisComment"
+                id: 1,
+                itemId: 5,
+                stars: 4,
+                reviewerEmail: "cgaucho@ucsb.edu",
+                dateReviewed: "2022-01-03T00:00:02",
+                comments: "some other comment"
             });
         });
 
         const queryClient = new QueryClient();
-        test("renders without crashing", () => {
-            render(
-                <QueryClientProvider client={queryClient}>
-                    <MemoryRouter>
-                        <MenuItemReviewEditPage />
-                    </MemoryRouter>
-                </QueryClientProvider>
-            );
-        });
-        
+
         test("Is populated with the data provided", async () => {
 
             render(
@@ -113,26 +104,46 @@ describe("MenuItemReviewEditPage tests", () => {
                 </QueryClientProvider>
             );
 
-            await screen.findByTestId("MenuItemReviewForm-itemid");
-            
-            
-            const idField = screen.getByTestId("MenuItemReviewForm-id");
-            const itemidField = screen.getByTestId("MenuItemReviewForm-itemid");
-            const emailField = screen.getByTestId("MenuItemReviewForm-email");
-            const starsField = screen.getByTestId("MenuItemReviewForm-stars");
-            const localDateTimeField = screen.getByTestId("MenuItemReviewForm-localDateTime");
-            const commentsField = screen.getByTestId("MenuItemReviewForm-comments");
-            const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
+            await screen.findByTestId("MenuItemReview-id");
 
+            const idField = screen.getByTestId("MenuItemReview-id");
+            const itemIdField = screen.getByTestId("itemId");
+            const starsField = screen.getByTestId("stars");
+            const reviewerEmailField = screen.getByTestId("reviewerEmail");
+            const commentField = screen.getByTestId("comments");
+            const submitButton = screen.getByTestId("MenuItemReview-submit");
+
+            expect(idField).toBeInTheDocument();
             expect(idField).toHaveValue("1");
-            expect(itemidField).toHaveValue("2");
-            expect(emailField).toHaveValue("fake@gmail.com");
-            expect(starsField).toHaveValue("3");
-            expect(localDateTimeField).toHaveValue("2022-02-02T00:00");
-            expect(commentsField).toHaveValue("myComment");
-            expect(submitButton).toBeInTheDocument();
+            expect(itemIdField).toBeInTheDocument();
+            expect(itemIdField).toHaveValue(5);
+            expect(starsField).toBeInTheDocument();
+            expect(starsField).toHaveValue(4);
+
+            expect(submitButton).toHaveTextContent("Update");
+
+            fireEvent.change(reviewerEmailField, { target: { value: 'cgaucho@ucsb.edu' } });
+            fireEvent.change(commentField, { target: { value: 'some other comment' } });
+            fireEvent.click(submitButton);
+
+            await waitFor(() => expect(mockToast).toBeCalled());
+            expect(mockToast).toBeCalledWith("Review updated - id: 1 itemId: 5 stars: 4 reviewerEmail: cgaucho@ucsb.edu dateReviewed: 2022-01-03T00:00:02 comments: some other comment");
+
+            expect(mockNavigate).toBeCalledWith({ "to": "/menuitemreview" });
+
+            expect(axiosMock.history.put.length).toBe(1); // times called
+            expect(axiosMock.history.put[0].params).toEqual({ id: 1 });
+            expect(axiosMock.history.put[0].data).toBe(JSON.stringify({
+                itemId: 5,
+                stars: 4,
+                reviewerEmail: "cgaucho@ucsb.edu",
+                dateReviewed: "2022-01-03T00:00:02",
+                comments: "some other comment"
+            })); // posted object
+
+
         });
-        
+
         test("Changes when you click Update", async () => {
 
             render(
@@ -142,52 +153,29 @@ describe("MenuItemReviewEditPage tests", () => {
                     </MemoryRouter>
                 </QueryClientProvider>
             );
-                
-            await waitFor(() => {
-                expect(screen.getByTestId("MenuItemReviewForm-itemid")).toBeInTheDocument();
-            });
 
-            const idField = screen.getByTestId("MenuItemReviewForm-id");
-            const itemidField = screen.getByTestId("MenuItemReviewForm-itemid");
-            const emailField = screen.getByTestId("MenuItemReviewForm-email");
-            const starsField = screen.getByTestId("MenuItemReviewForm-stars");
-            const localDateTimeField = screen.getByTestId("MenuItemReviewForm-localDateTime");
-            const commentsField = screen.getByTestId("MenuItemReviewForm-comments");
-            const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
+            await screen.findByTestId("MenuItemReview-id");
+
+            const idField = screen.getByTestId("MenuItemReview-id");
+            const itemIdField = screen.getByTestId("itemId");
+            const starsField = screen.getByTestId("stars");
+            const commentField = screen.getByTestId("comments");
+            const submitButton = screen.getByTestId("MenuItemReview-submit");
 
             expect(idField).toHaveValue("1");
-            expect(itemidField).toHaveValue("2");
-            expect(emailField).toHaveValue("fake@gmail.com");
-            expect(starsField).toHaveValue("3");
-            expect(localDateTimeField).toHaveValue("2022-02-02T00:00");
-            expect(commentsField).toHaveValue("myComment");
-
+            expect(itemIdField).toHaveValue(5);
+            expect(starsField).toHaveValue(4);
             expect(submitButton).toBeInTheDocument();
 
-            fireEvent.change(itemidField, { target: { value: "3" } })
-            fireEvent.change(emailField, { target: { value: "faker@gmail.com" } })
-            fireEvent.change(starsField, { target: { value: "4" } })
-            fireEvent.change(localDateTimeField, { target: { value: "2022-12-25T08:00" } })
-            fireEvent.change(commentsField, { target: { value: "hisComment" } })
+            fireEvent.change(commentField, { target: { value: 'comment' } })
 
             fireEvent.click(submitButton);
 
             await waitFor(() => expect(mockToast).toBeCalled());
-            expect(mockToast).toBeCalledWith("MenuItemReview Updated - id: 1 email: faker@gmail.com, posted at: 2022-12-25T08:00");
             expect(mockNavigate).toBeCalledWith({ "to": "/menuitemreview" });
-
-            expect(axiosMock.history.put.length).toBe(1); // times called
-            expect(axiosMock.history.put[0].params).toEqual({ id: 1 });
-            expect(axiosMock.history.put[0].data).toBe(JSON.stringify({
-                itemid: '3',
-                email: "faker@gmail.com",
-                stars: '4',
-                localDateTime: "2022-12-25T08:00",
-                comments: "hisComment"
-            })); // posted object
-
         });
+
+
     });
+
 });
-
-
