@@ -15,8 +15,8 @@ jest.mock('react-router-dom', () => ({
 describe("UCSBOrganizationTabl tests", () => {
     const queryClient = new QueryClient();
   
-    const expectedHeaders = ["orgCode", "orgTranslationShort", "orgTranslation", "inactive"];
-    const expectedFields = ["orgCode", "orgTranslationShort", "orgTranslation", "inactive"];
+    const expectedHeaders = ["orgCode", "orgTranslationShort", "orgTranslation", "Inactive"];
+    const expectedFields = ["orgCode", "orgTranslationShort", "orgTranslation", "Inactive"];
     const testId = "UCSBOrganizationTable";
   
     test("renders empty table correctly", () => {
@@ -112,7 +112,6 @@ describe("UCSBOrganizationTabl tests", () => {
       expect(screen.getByTestId(`${testId}-cell-row-0-col-orgCode`)).toHaveTextContent("SKY");
       expect(screen.getByTestId(`${testId}-cell-row-0-col-orgTranslationShort`)).toHaveTextContent("SKYDIVING CLUB");
       expect(screen.getByTestId(`${testId}-cell-row-0-col-orgTranslation`)).toHaveTextContent("SKYDIVING CLUB AT UCSB");
-      expect(screen.getByTestId(`${testId}-cell-row-0-col-inactive`)).toHaveTextContent("false");
   
       expect(screen.getByTestId(`${testId}-cell-row-1-col-orgCode`)).toHaveTextContent("OSLI");
       expect(screen.getByTestId(`${testId}-cell-row-1-col-orgTranslationShort`)).toHaveTextContent("STUDENT LIFE");

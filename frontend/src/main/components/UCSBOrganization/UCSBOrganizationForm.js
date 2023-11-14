@@ -19,26 +19,35 @@ function UCSBOrganizationForm({ initialContents, submitAction, buttonLabel = "Cr
 
     return (
         <Form onSubmit={handleSubmit(submitAction)}>
-            
-            <Form.Group className="mb-3" >
-                <Form.Label htmlFor="orgCode">orgCode</Form.Label>
-                <Form.Control
-                    data-testid={testIdPrefix + "-orgCode"}
-                    id="orgCode"
-                    type="text"
-                    {...register("orgCode", {
-                        required: "orgCode is required",
-                        maxLength : {
-                            value: 30,
-                            message: "Max length 30 characters"
-                        }
-                    })}
-                />
-                <Form.Control.Feedback type="invalid">
-                    {errors.orgCode?.message}
-                </Form.Control.Feedback>
-            </Form.Group>
-            
+
+            {initialContents ? (
+                <Form.Group className="mb-3" >
+                    <Form.Label htmlFor="orgCode">orgCode</Form.Label>
+                    <Form.Control
+                        data-testid={testIdPrefix + "-orgCode"}
+                        id="orgCode"
+                        type="text"
+                        {...register("orgCode")}
+                        value={initialContents.orgCode}
+                        disabled
+                    />
+                </Form.Group>
+            ) : (
+                <Form.Group className="mb-3" >
+                    <Form.Label htmlFor="orgCode">orgCode</Form.Label>
+                    <Form.Control
+                        data-testid={testIdPrefix + "-orgCode"}
+                        id="orgCode"
+                        type="text"
+                        {...register("orgCode", {
+                            required: "orgCode is required"
+                        })}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.orgCode?.message}
+                    </Form.Control.Feedback>
+                </Form.Group>
+            )}
 
             <Form.Group className="mb-3" >
                 <Form.Label htmlFor="orgTranslationShort">orgTranslationShort</Form.Label>
@@ -64,7 +73,7 @@ function UCSBOrganizationForm({ initialContents, submitAction, buttonLabel = "Cr
                     type="text"
                     isInvalid={Boolean(errors.orgTranslation)}
                     {...register("orgTranslation", {
-                        required: "orgTranslation is required."
+                        required: "orgTranslation is required"
                     })}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -73,19 +82,16 @@ function UCSBOrganizationForm({ initialContents, submitAction, buttonLabel = "Cr
             </Form.Group>
 
             <Form.Group className="mb-3" >
-                <Form.Label htmlFor="inactive">Inactive</Form.Label>
-                <Form.Control
-                    data-testid={testIdPrefix + "-inactive"}
-                    id="inactive"
-                    type="boolean"
-                    isInvalid={Boolean(errors.inactive)}
-                    {...register("inactive", {
-                        required: "inactive is required."
-                    })}
-                />
-                <Form.Control.Feedback type="invalid">
-                    {errors.inactive?.message}
-                </Form.Control.Feedback>
+            <Form.Check // prettier-ignore
+                            type="switch"
+                            data-testid="UCSBOrganizationForm-inactive"
+                            id="inactive"
+                            label="Inactive?"
+                            {...register("inactive", {})}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.done?.message}
+                        </Form.Control.Feedback>
             </Form.Group>
 
             <Button

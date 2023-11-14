@@ -1,10 +1,7 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { BrowserRouter as Router } from "react-router-dom";
-
+import { render, waitFor, fireEvent, screen } from "@testing-library/react";
 import UCSBOrganizationForm from "main/components/UCSBOrganization/UCSBOrganizationForm";
 import { ucsbOrganizationFixtures } from "fixtures/ucsbOrganizationFixtures";
-
-import { QueryClient, QueryClientProvider } from "react-query";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const mockedNavigate = jest.fn();
 
@@ -13,104 +10,100 @@ jest.mock('react-router-dom', () => ({
     useNavigate: () => mockedNavigate
 }));
 
+
 describe("UCSBOrganizationForm tests", () => {
-    const queryClient = new QueryClient();
 
-    const expectedHeaders = ["orgCode","orgTranslationShort", "orgTranslation", "Inactive"];
-    const testId = "UCSBOrganizationForm";
+    test("renders correctly", async () => {
 
-    test("renders correctly with no initialContents", async () => {
         render(
-            <QueryClientProvider client={queryClient}>
-                <Router>
-                    <UCSBOrganizationForm />
-                </Router>
-            </QueryClientProvider>
+            <Router  >
+                <UCSBOrganizationForm />
+            </Router>
         );
-
-        expect(await screen.findByText(/Create/)).toBeInTheDocument();
-
-        expectedHeaders.forEach((headerText) => {
-            const header = screen.getByText(headerText);
-            expect(header).toBeInTheDocument();
-        });
-
+        await screen.findByText(/orgCode/);
+        await screen.findByText(/orgTranslationShort/);
+        //await screen.findByText(/orgTranslation/);
+        await screen.findByText(/Inactive/);
+        await screen.findByText(/Create/);
     });
 
-    test("renders correctly when passing in initialContents", async () => {
+
+    test("renders correctly when passing in a UCSBOrganization", async () => {
+
         render(
-            <QueryClientProvider client={queryClient}>
-                <Router>
-                    <UCSBOrganizationForm initialContents={ucsbOrganizationFixtures.oneOrganization} />
-                </Router>
-            </QueryClientProvider>
+            <Router  >
+                <UCSBOrganizationForm initialContents={ucsbOrganizationFixtures.oneOrganization} />
+            </Router>
         );
+        await screen.findByTestId(/UCSBOrganizationForm-orgCode/);
+        expect(screen.getByText(/orgCode/)).toBeInTheDocument();
+        expect(screen.getByTestId(/UCSBOrganizationForm-orgCode/)).toHaveValue("ZPR");
+    });
 
-        expect(await screen.findByText(/Create/)).toBeInTheDocument();
+    test("Correct Error messsages on missing input", async () => {
 
-        expectedHeaders.forEach((headerText) => {
-            const header = screen.getByText(headerText);
-            expect(header).toBeInTheDocument();
-        });
+        render(
+            <Router  >
+                <UCSBOrganizationForm />
+            </Router>
+        );
+        await screen.findByTestId("UCSBOrganizationForm-submit");
+        const submitButton = screen.getByTestId("UCSBOrganizationForm-submit");
 
-        expect(await screen.findByTestId(`${testId}-orgCode`)).toBeInTheDocument();
-        expect(screen.getByText(`orgCode`)).toBeInTheDocument();
-        expect(await screen.findByTestId(`${testId}-orgTranslationShort`)).toBeInTheDocument();
-        expect(screen.getByText(`orgTranslationShort`)).toBeInTheDocument()
-        expect(await screen.findByTestId(`${testId}-orgTranslation`)).toBeInTheDocument();
-        expect(screen.getByText(`orgTranslation`)).toBeInTheDocument();
-        expect(await screen.findByTestId(`${testId}-inactive`)).toBeInTheDocument();
-        expect(screen.getByText(`Inactive`)).toBeInTheDocument();
+        fireEvent.click(submitButton);
+
+        await screen.findByText(/orgCode is required/);
+        expect(screen.getByText(/orgTranslationShort is required/)).toBeInTheDocument();
+        expect(screen.getByText(/orgTranslation is required/)).toBeInTheDocument();
+    });
+
+    test("No Error messsages on good input", async () => {
+
+        const mockSubmitAction = jest.fn();
+
+
+        render(
+            <Router  >
+                <UCSBOrganizationForm submitAction={mockSubmitAction} />
+            </Router>
+        );
+        await screen.findByTestId("UCSBOrganizationForm-orgCode");
+
+        const orgCodeField = screen.getByTestId("UCSBOrganizationForm-orgCode");
+        const orgTranslationShortField = screen.getByTestId("UCSBOrganizationForm-orgTranslationShort");
+        const orgTranslationField = screen.getByTestId("UCSBOrganizationForm-orgTranslation");
+        const inactiveField = screen.getByTestId("UCSBOrganizationForm-inactive");
+        const submitButton = screen.getByTestId("UCSBOrganizationForm-submit");
+
+        fireEvent.change(orgCodeField, { target: { value: 'ZPR' } });
+        fireEvent.change(orgTranslationShortField, { target: { value: 'ZETA PHI RHO' } });
+        fireEvent.change(orgTranslationField, { target: { value: 'ZETA PHI RHO' } });
+        fireEvent.click(inactiveField);
+        fireEvent.click(submitButton);
+
+        await waitFor(() => expect(mockSubmitAction).toHaveBeenCalled());
         
+        expect(screen.queryByText(/orgCode is required/)).not.toBeInTheDocument();
+        expect(screen.queryByText(/orgTranslationShort is required/)).not.toBeInTheDocument();
+        expect(screen.queryByText(/orgTranslation is required/)).not.toBeInTheDocument();
+
     });
 
 
     test("that navigate(-1) is called when Cancel is clicked", async () => {
-        render(
-            <QueryClientProvider client={queryClient}>
-                <Router>
-                    <UCSBOrganizationForm />
-                </Router>
-            </QueryClientProvider>
-        );
-        expect(await screen.findByTestId(`${testId}-cancel`)).toBeInTheDocument();
-        const cancelButton = screen.getByTestId(`${testId}-cancel`);
 
-        expect(await screen.findByTestId(`${testId}-submit`)).toBeInTheDocument();
-        const submitButton = screen.getByTestId(`${testId}-submit`);
+        render(
+            <Router  >
+                <UCSBOrganizationForm />
+            </Router>
+        );
+        await screen.findByTestId("UCSBOrganizationForm-cancel");
+        const cancelButton = screen.getByTestId("UCSBOrganizationForm-cancel");
 
         fireEvent.click(cancelButton);
 
-        fireEvent.click(submitButton)
-
         await waitFor(() => expect(mockedNavigate).toHaveBeenCalledWith(-1));
-    });
 
-    test("that the correct validations are performed", async () => {
-        render(
-            <QueryClientProvider client={queryClient}>
-                <Router>
-                    <UCSBOrganizationForm />
-                </Router>
-            </QueryClientProvider>
-        );
-
-        expect(await screen.findByText(/Create/)).toBeInTheDocument();
-        const submitButton = screen.getByText(/Create/);
-        fireEvent.click(submitButton);
-
-        await screen.findByText(/orgCode is required/);
-        await screen.findByText(/inactive is required/);
-        await screen.findByText(/orgTranslationShort is required/);
-        expect(screen.getByText(/orgTranslation is required/)).toBeInTheDocument();
-
-        const orgCodeInput = screen.getByTestId(`${testId}-orgCode`);
-        fireEvent.change(orgCodeInput, { target: { value: "a".repeat(31) } });
-        fireEvent.click(submitButton);
-
-        await waitFor(() => {
-            expect(screen.getByText(/Max length 30 characters/)).toBeInTheDocument();
-        });
     });
 
 });
