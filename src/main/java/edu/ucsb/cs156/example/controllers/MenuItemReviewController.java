@@ -49,13 +49,12 @@ public class MenuItemReviewController extends ApiController{
                                         @Parameter(name = "timestamp") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime timestamp
                                         )throws JsonProcessingException
                                         {
-        MenuItemReview newReview = MenuItemReview.builder()
-                                                    .itemId(itemId)
-                                                    .reviewerEmail(email)
-                                                    .stars(stars)
-                                                    .comments(comments)
-                                                    .dateReviewed(timestamp)
-                                                    .build();
+        MenuItemReview newReview = new MenuItemReview();
+        newReview.setItemId(itemId);
+        newReview.setReviewerEmail(email);
+        newReview.setStars(stars);
+        newReview.setComments(comments);
+        newReview.setDateReviewed(timestamp);
         
         MenuItemReview postedObj =  repo.save(newReview);
         return postedObj;
