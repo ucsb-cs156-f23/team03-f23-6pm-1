@@ -19,22 +19,35 @@ function UCSBOrganizationForm({ initialContents, submitAction, buttonLabel = "Cr
 
     return (
         <Form onSubmit={handleSubmit(submitAction)}>
-            
-            <Form.Group className="mb-3" >
-                <Form.Label htmlFor="orgCode">orgCode</Form.Label>
-                <Form.Control
-                    data-testid={testIdPrefix + "-orgCode"}
-                    id="orgCode"
-                    type="text"
-                    {...register("orgCode", {
-                        required: "orgCode is required"
-                    })}
-                />
-                <Form.Control.Feedback type="invalid">
-                    {errors.orgCode?.message}
-                </Form.Control.Feedback>
-            </Form.Group>
-            
+
+            {initialContents ? (
+                <Form.Group className="mb-3" >
+                    <Form.Label htmlFor="orgCode">orgCode</Form.Label>
+                    <Form.Control
+                        data-testid={testIdPrefix + "-orgCode"}
+                        id="orgCode"
+                        type="text"
+                        {...register("orgCode")}
+                        value={initialContents.orgCode}
+                        disabled
+                    />
+                </Form.Group>
+            ) : (
+                <Form.Group className="mb-3" >
+                    <Form.Label htmlFor="orgCode">orgCode</Form.Label>
+                    <Form.Control
+                        data-testid={testIdPrefix + "-orgCode"}
+                        id="orgCode"
+                        type="text"
+                        {...register("orgCode", {
+                            required: "orgCode is required"
+                        })}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.orgCode?.message}
+                    </Form.Control.Feedback>
+                </Form.Group>
+            )}
 
             <Form.Group className="mb-3" >
                 <Form.Label htmlFor="orgTranslationShort">orgTranslationShort</Form.Label>
