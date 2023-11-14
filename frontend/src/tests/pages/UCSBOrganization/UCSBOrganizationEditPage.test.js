@@ -77,13 +77,13 @@ describe("UCSBOrganizationEditPage tests", () => {
                 orgCode: "SKY",
                 orgTranslationShort: "SKYDIVING CLUB",
                 orgTranslation: "SKYDIVING CLUB AT UCSB",
-                inactive: "false"
+                inactive: true
             });
             axiosMock.onPut('/api/UCSBOrganization').reply(200, {
                 orgCode: "SKY",
                 orgTranslationShort: "CLUB SKYDIVING",
                 orgTranslation: "SKYDIVING AT UCSB UCSB",
-                inactive: "false"
+                inactive: true
             });
         });
 
@@ -114,7 +114,7 @@ describe("UCSBOrganizationEditPage tests", () => {
             expect(orgTranslationField).toBeInTheDocument();
             expect(orgTranslationField).toHaveValue("SKYDIVING CLUB AT UCSB");
             expect(inactiveField).toBeInTheDocument();
-            expect(inactiveField).toHaveValue("false");
+            expect(inactiveField).toBeChecked();
 
             expect(submitButton).toHaveTextContent("Update");
 
@@ -123,7 +123,7 @@ describe("UCSBOrganizationEditPage tests", () => {
             fireEvent.click(submitButton);
 
             await waitFor(() => expect(mockToast).toBeCalled());
-            expect(mockToast).toBeCalledWith("UCSBOrganization Updated - orgCode: SKY orgTranslationShort: CLUB SKYDIVING orgTranslation: SKYDIVING AT UCSB UCSB inactive: false");
+            expect(mockToast).toBeCalledWith("UCSBOrganization Updated - orgCode: SKY");
             
             expect(mockNavigate).toBeCalledWith({ "to": "/UCSBOrganization" });
 
@@ -132,7 +132,7 @@ describe("UCSBOrganizationEditPage tests", () => {
             expect(axiosMock.history.put[0].data).toBe(JSON.stringify({
                 orgTranslationShort: "CLUB SKYDIVING",
                 orgTranslation: "SKYDIVING AT UCSB UCSB",
-                inactive: "false"
+                inactive: true
             })); // posted object
 
 
@@ -159,7 +159,7 @@ describe("UCSBOrganizationEditPage tests", () => {
             expect(orgCodeField).toHaveValue("SKY");
             expect(orgTranslationShortField).toHaveValue("SKYDIVING CLUB");
             expect(orgTranslationField).toHaveValue("SKYDIVING CLUB AT UCSB");
-            expect(inactiveField).toHaveValue("false");
+            expect(inactiveField).toBeChecked();
             expect(submitButton).toBeInTheDocument();
 
             fireEvent.change(orgTranslationShortField, { target: { value: 'CLUB SKYDIVING' } });
@@ -167,7 +167,7 @@ describe("UCSBOrganizationEditPage tests", () => {
             fireEvent.click(submitButton);
 
             await waitFor(() => expect(mockToast).toBeCalled());
-            expect(mockToast).toBeCalledWith("UCSBOrganization Updated - orgCode: SKY orgTranslationShort: CLUB SKYDIVING orgTranslation: SKYDIVING AT UCSB UCSB inactive: false");
+            expect(mockToast).toBeCalledWith("UCSBOrganization Updated - orgCode: SKY");
             expect(mockNavigate).toBeCalledWith({ "to": "/UCSBOrganization" });
         });
 

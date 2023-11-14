@@ -59,7 +59,7 @@ describe("UCSBOrganizationCreatePage tests", () => {
             orgCode: "ZPR",
             orgTranslationShort: "ZETA PHI RHO",
             orgTranslation: "ZETA PHI RHO",
-            inactive: "false"
+            inactive: false
         };
 
         axiosMock.onPost("/api/UCSBOrganization/post").reply(202, organization);
@@ -81,16 +81,16 @@ describe("UCSBOrganizationCreatePage tests", () => {
         const orgTranslationInput = screen.getByLabelText("orgTranslation");
         expect(orgTranslationInput).toBeInTheDocument();
 
-        const inactiveInput = screen.getByLabelText("Inactive");
+        const inactiveInput = screen.getByTestId("UCSBOrganizationForm-inactive");
         expect(inactiveInput).toBeInTheDocument();
 
         const createButton = screen.getByText("Create");
         expect(createButton).toBeInTheDocument();
 
-        fireEvent.change(orgCodeInput, {target: {value: 'ZPR'}})
-        fireEvent.change(orgTranslationShortInput, { target: { value: 'ZETA PHI RHO' } })
-        fireEvent.change(orgTranslationInput, { target: { value: 'ZETA PHI RHO' } })
-        fireEvent.change(inactiveInput, {target: {value: 'false'}})
+        fireEvent.change(orgCodeInput, {target: {value: 'ZPR'}});
+        fireEvent.change(orgTranslationShortInput, { target: { value: 'ZETA PHI RHO' } });
+        fireEvent.change(orgTranslationInput, { target: { value: 'ZETA PHI RHO' } });
+        fireEvent.click(inactiveInput);
         fireEvent.click(createButton);
 
         await waitFor(() => expect(axiosMock.history.post.length).toBe(1));
@@ -99,11 +99,11 @@ describe("UCSBOrganizationCreatePage tests", () => {
             orgCode: "ZPR",
             orgTranslationShort: "ZETA PHI RHO",
             orgTranslation: "ZETA PHI RHO",
-            inactive: "false"
+            inactive: true
         });
 
         // assert - check that the toast was called with the expected message
-        expect(mockToast).toBeCalledWith("New UCSBOrganization Created - orgCode: ZPR orgTranslationShort: ZETA PHI RHO orgTranslation: ZETA PHI RHO inactive: false");
+        expect(mockToast).toBeCalledWith("New UCSBOrganization Created - orgCode: ZPR");
         expect(mockNavigate).toBeCalledWith({ "to": "/UCSBOrganization" });
 
     });

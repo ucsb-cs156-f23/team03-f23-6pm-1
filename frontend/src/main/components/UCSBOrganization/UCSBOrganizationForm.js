@@ -64,7 +64,7 @@ function UCSBOrganizationForm({ initialContents, submitAction, buttonLabel = "Cr
                     type="text"
                     isInvalid={Boolean(errors.orgTranslation)}
                     {...register("orgTranslation", {
-                        required: "orgTranslation is required."
+                        required: "orgTranslation is required"
                     })}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -73,19 +73,16 @@ function UCSBOrganizationForm({ initialContents, submitAction, buttonLabel = "Cr
             </Form.Group>
 
             <Form.Group className="mb-3" >
-                <Form.Label htmlFor="inactive">Inactive</Form.Label>
-                <Form.Control
-                    data-testid={testIdPrefix + "-inactive"}
-                    id="inactive"
-                    type="boolean"
-                    isInvalid={Boolean(errors.inactive)}
-                    {...register("inactive", {
-                        required: "inactive is required."
-                    })}
-                />
-                <Form.Control.Feedback type="invalid">
-                    {errors.inactive?.message}
-                </Form.Control.Feedback>
+            <Form.Check // prettier-ignore
+                            type="switch"
+                            data-testid="UCSBOrganizationForm-inactive"
+                            id="inactive"
+                            label="Inactive?"
+                            {...register("inactive", {})}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.done?.message}
+                        </Form.Control.Feedback>
             </Form.Group>
 
             <Button
