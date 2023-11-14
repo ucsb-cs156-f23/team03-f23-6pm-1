@@ -21,13 +21,15 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
 
     // Stryker disable next-line Regex
     const isodate_regex = /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d)/i;
-    const stars_regex = /[0-5]/;
+
+    // Stryker disable next-line Regex
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
     return (
 
         <Form onSubmit={handleSubmit(submitAction)}>
-
-
             <Row>
+
                 {initialContents && (
                     <Col>
                         <Form.Group className="mb-3" >
@@ -43,50 +45,65 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
                         </Form.Group>
                     </Col>
                 )}
-
                 <Col>
                     <Form.Group className="mb-3" >
-                        <Form.Label htmlFor="itemId">Item Number</Form.Label>
+                        <Form.Label htmlFor="itemId">itemId</Form.Label>
                         <Form.Control
                             data-testid="MenuItemReviewForm-itemId"
                             id="itemId"
-                            type="text"
-                            {...register("itemId")}
+                            type="number"
+                            isInvalid={Boolean(errors.itemId)}
+                            {...register("itemId", {
+                                valueAsNumber: "Must be a number",
+                            })}
                         />
                     </Form.Group>
                 </Col>
-
+            </Row>
+            <Row>
                 <Col>
                     <Form.Group className="mb-3" >
-                        <Form.Label htmlFor="email">Email</Form.Label>
+                        <Form.Label htmlFor="stars">Stars</Form.Label>
+                        <Form.Control
+                            data-testid="MenuItemReviewForm-stars"
+                            id="stars"
+                            type="number"
+                            isInvalid={Boolean(errors.stars)}
+                            {...register("stars", {
+                                required: "Stars is required.",
+                                valueAsNumber: "Must be a number",
+                                max: 5,
+                                min: 0
+                            })}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.stars?.message}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <Form.Group className="mb-3" >
+                        <Form.Label htmlFor="email">Reviewer Email</Form.Label>
                         <Form.Control
                             data-testid="MenuItemReviewForm-email"
                             id="email"
                             type="text"
+                            isInvalid={errors.email}
+                            {...register("email", { required: "Reviewer Email is required", pattern: emailRegex })}
                             {...register("email")}
                         />
-                    </Form.Group>
-                </Col>
-
-                <Col>
-                    <Form.Group className="mb-3" >
-                        <Form.Label htmlFor="stars">stars</Form.Label>
-                        <Form.Control
-                            data-testid="MenuItemReviewForm-stars"
-                            id="stars"
-                            type="text"
-                            {...register("stars", {required: true, pattern: stars_regex})}
-                            isInvalid={Boolean(errors.stars)}
-                        />
                         <Form.Control.Feedback type="invalid">
-                            {errors.stars && 'Must input a rating 0-5'}
+                            {errors.email?.message}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
-
+            </Row>
+            <Row>
                 <Col>
                     <Form.Group className="mb-3" >
-                        <Form.Label htmlFor="timestamp">Date (iso format)</Form.Label>
+                        <Form.Label htmlFor="timestamp">Date Reviewed</Form.Label>
                         <Form.Control
                             data-testid="MenuItemReviewForm-timestamp"
                             id="timestamp"
@@ -95,24 +112,28 @@ function MenuItemReviewForm({ initialContents, submitAction, buttonLabel = "Crea
                             {...register("timestamp", { required: true, pattern: isodate_regex })}
                         />
                         <Form.Control.Feedback type="invalid">
-                            {errors.timestamp && 'Date requested must be in ISO format'}
+                            {errors.timestamp && 'Date reviewed is required. '}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
-
-                <Col>
-                    <Form.Group className="mb-3" >
-                        <Form.Label htmlFor="comments">comments</Form.Label>
-                        <Form.Control
-                            data-testid="MenuItemReviewForm-comments"
-                            id="comments"
-                            type="text"
-                            {...register("comments")}
-                        />
-                    </Form.Group>
-                </Col>
             </Row>
-            
+            <Row>
+                <Form.Group className="mb-3" >
+                    <Form.Label htmlFor="comments">Comments</Form.Label>
+                    <Form.Control
+                        data-testid="MenuItemReviewForm-comments"
+                        id="comments"
+                        type="text"
+                        isInvalid={Boolean(errors.comments)}
+                        {...register("comments", {
+                            required: "Comments are required."
+                        })}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.comments?.message}
+                    </Form.Control.Feedback>
+                </Form.Group>
+            </Row>
             <Row>
                 <Col>
                     <Button

@@ -125,9 +125,9 @@ describe("MenuItemReviewEditPage tests", () => {
             const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
 
             expect(idField).toHaveValue("1");
-            expect(itemidField).toHaveValue("2");
+            expect(itemidField).toHaveValue(2);
             expect(emailField).toHaveValue("fake@gmail.com");
-            expect(starsField).toHaveValue("3");
+            expect(starsField).toHaveValue(3);
             expect(localDateTimeField).toHaveValue("2022-02-02T00:00");
             expect(commentsField).toHaveValue("myComment");
             expect(submitButton).toBeInTheDocument();
@@ -156,17 +156,17 @@ describe("MenuItemReviewEditPage tests", () => {
             const submitButton = screen.getByTestId("MenuItemReviewForm-submit");
 
             expect(idField).toHaveValue("1");
-            expect(itemidField).toHaveValue("2");
+            expect(itemidField).toHaveValue(2);
             expect(emailField).toHaveValue("fake@gmail.com");
-            expect(starsField).toHaveValue("3");
+            expect(starsField).toHaveValue(3);
             expect(localDateTimeField).toHaveValue("2022-02-02T00:00");
             expect(commentsField).toHaveValue("myComment");
 
             expect(submitButton).toBeInTheDocument();
 
-            fireEvent.change(itemidField, { target: { value: "3" } })
+            fireEvent.change(itemidField, { target: { value: 3 } })
             fireEvent.change(emailField, { target: { value: "faker@gmail.com" } })
-            fireEvent.change(starsField, { target: { value: "4" } })
+            fireEvent.change(starsField, { target: { value: 4 } })
             fireEvent.change(localDateTimeField, { target: { value: "2022-12-25T08:00" } })
             fireEvent.change(commentsField, { target: { value: "hisComment" } })
 
@@ -179,9 +179,9 @@ describe("MenuItemReviewEditPage tests", () => {
             expect(axiosMock.history.put.length).toBe(1); // times called
             expect(axiosMock.history.put[0].params).toEqual({ id: 1 });
             expect(axiosMock.history.put[0].data).toBe(JSON.stringify({
-                itemId: '3',
+                itemId: 3,
                 email: "faker@gmail.com",
-                stars: '4',
+                stars: 4,
                 comments: "hisComment",
                 timestamp: "2022-12-25T08:00"
             })); // posted object
